@@ -431,7 +431,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       body: JSON.stringify({ phone, userType: selectedUserType, parkingTime: selectedTime, timestamp: new Date().toISOString() })
     }).catch(() => {});
 
-    gtag('event', 'waitlist_signup', { user_type: selectedUserType, parking_time: selectedTime });
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: 'waitlist_signup', user_type: selectedUserType, parking_time: selectedTime });
 
     document.getElementById('waitlist-form').style.display = 'none';
     document.getElementById('floating-cta').style.display = 'none';
