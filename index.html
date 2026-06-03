@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ParkAlert Downtown Haifa - קמפוס אונו</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  .prototype-banner { background: #0F6E56; color: #fff; text-align: center; padding: 12px 16px; font-size: 13.5px; font-weight: 500; line-height: 1.5; position: sticky; top: 0; z-index: 100; }
+  body { font-family: 'Heebo', sans-serif; background: #f5f5f3; color: #1a1a1a; direction: rtl; min-height: 100vh; }
+  .container { max-width: 600px; margin: 0 auto; padding: 0 1rem 6rem; }
+
+  .hero { text-align: center; padding: 2.2rem 1rem 1.5rem; }
+  .logo-badge { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #e0e0dc; border-radius: 999px; padding: 6px 16px; font-size: 13px; color: #666; margin-bottom: 1rem; }
+  .campus-tag { display: inline-flex; align-items: center; gap: 6px; background: #E1F5EE; color: #0F6E56; border-radius: 999px; padding: 6px 16px; font-size: 13px; font-weight: 500; margin-bottom: 1.2rem; }
+  h1 { font-size: 32px; font-weight: 800; color: #1a1a1a; margin-bottom: 0.4rem; }
+  h1 span { color: #1D9E75; }
+  .subtitle { font-size: 15px; color: #666; margin-bottom: 0.5rem; line-height: 1.7; }
+  .address-line { font-size: 13px; color: #999; }
+
+  .problem-box { background: linear-gradient(135deg, #1D9E75 0%, #0F6E56 100%); border-radius: 16px; padding: 22px 18px; margin-bottom: 1.2rem; text-align: center; color: #fff; }
+  .problem-stat { font-size: 38px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
+  .problem-text { font-size: 14px; opacity: 0.95; line-height: 1.5; }
+
+  /* Waitlist HERO - now near top */
+  .waitlist-box { background: #fff; border: 2.5px solid #1D9E75; border-radius: 18px; padding: 24px 22px; box-shadow: 0 6px 28px rgba(29,158,117,0.15); margin-bottom: 1.5rem; }
+  .wl-badge { display: inline-block; background: #E1F5EE; color: #0F6E56; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 999px; margin-bottom: 12px; }
+  .waitlist-box strong { font-size: 21px; font-weight: 800; color: #1a1a1a; display: block; margin-bottom: 6px; line-height: 1.3; }
+  .wl-sub { font-size: 14px; color: #666; margin-bottom: 20px; line-height: 1.6; }
+  .wl-label { font-size: 13px; font-weight: 700; color: #444; margin-bottom: 8px; display: block; }
+
+  .user-type-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .user-type-btn { padding: 12px 6px; border-radius: 12px; border: 1.5px solid #e0e0dc; background: #fff; cursor: pointer; text-align: center; font-family: 'Heebo', sans-serif; transition: all 0.15s; color: #555; }
+  .user-type-btn:hover { border-color: #1D9E75; }
+  .user-type-btn.selected { border-color: #1D9E75; background: #E1F5EE; color: #0F6E56; }
+  .user-type-emoji { font-size: 22px; display: block; margin-bottom: 5px; }
+  .user-type-text { font-size: 11.5px; font-weight: 500; line-height: 1.3; display: block; }
+
+  .time-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; }
+  .time-opt { padding: 11px 8px; border-radius: 10px; border: 1.5px solid #e0e0dc; background: #fff; cursor: pointer; text-align: center; font-size: 13px; font-weight: 500; color: #555; font-family: 'Heebo', sans-serif; transition: all 0.15s; line-height: 1.4; }
+  .time-opt:hover { border-color: #1D9E75; color: #0F6E56; }
+  .time-opt.selected { border-color: #1D9E75; background: #E1F5EE; color: #0F6E56; }
+
+  .waitlist-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .waitlist-row input { flex: 1; padding: 14px; border-radius: 10px; border: 1.5px solid #e0e0dc; background: #fff; color: #1a1a1a; font-family: 'Heebo', sans-serif; font-size: 15px; text-align: center; }
+  .waitlist-row input:focus { outline: none; border-color: #1D9E75; }
+
+  .wl-submit { width: 100%; padding: 17px; border-radius: 12px; border: none; background: #1D9E75; color: #fff; font-size: 17px; font-weight: 800; cursor: pointer; font-family: 'Heebo', sans-serif; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(29,158,117,0.35); }
+  .wl-submit:hover { background: #0F6E56; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(29,158,117,0.45); }
+  .wl-arrow { font-size: 18px; }
+  .counter { font-size: 13px; color: #1D9E75; font-weight: 700; text-align: center; margin-top: 14px; }
+
+  .success-box { background: #E1F5EE; border-radius: 18px; padding: 30px 24px; text-align: center; display: none; margin-bottom: 1.5rem; }
+  .success-box .s-emoji { font-size: 42px; margin-bottom: 12px; }
+  .success-box strong { font-size: 19px; font-weight: 800; color: #0F6E56; display: block; margin-bottom: 8px; }
+  .success-box p { font-size: 14px; color: #1D9E75; line-height: 1.6; }
+
+  .how-it-works { background: #fff; border: 1px solid #e0e0dc; border-radius: 14px; padding: 18px 16px; margin-bottom: 1.2rem; }
+  .hiw-title { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; }
+  .hiw-steps { display: flex; flex-direction: column; gap: 10px; }
+  .hiw-step { display: flex; align-items: flex-start; gap: 10px; }
+  .hiw-num { width: 22px; height: 22px; border-radius: 50%; background: #E1F5EE; color: #0F6E56; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .hiw-text { font-size: 13px; color: #555; line-height: 1.6; }
+
+  .demo-title { font-size: 13px; font-weight: 700; color: #999; text-align: center; margin-bottom: 12px; letter-spacing: 0.3px; }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .stat { background: #fff; border: 1px solid #e0e0dc; border-radius: 12px; padding: 16px 10px; text-align: center; }
+  .stat-num { font-size: 28px; font-weight: 700; color: #1a1a1a; }
+  .stat-num.green { color: #1D9E75; }
+  .stat-num.red { color: #D85A30; }
+  .stat-label { font-size: 12px; color: #888; margin-top: 3px; }
+
+  .tabs-title { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tab { flex: 1; padding: 11px 6px; border-radius: 10px; border: 1.5px solid #e0e0dc; background: #fff; cursor: pointer; text-align: center; font-family: 'Heebo', sans-serif; transition: all 0.15s; }
+  .tab:hover { border-color: #1D9E75; }
+  .tab.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .tab-emoji { display: block; font-size: 18px; margin-bottom: 2px; }
+  .tab-label { display: block; font-size: 11px; line-height: 1.3; font-weight: 700; color: #888; }
+  .tab.active .tab-label { color: #fff; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .section-label { font-size: 12px; font-weight: 500; color: #999; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .lot-card { background: #fff; border: 1px solid #e0e0dc; border-radius: 14px; padding: 14px 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; transition: border-color 0.15s; }
+  .lot-card:hover { border-color: #aaa; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: #1D9E75; }
+  .dot-yellow { background: #EF9F27; }
+  .dot-red { background: #D85A30; }
+  .lot-info { flex: 1; }
+  .lot-name { font-size: 15px; font-weight: 500; color: #1a1a1a; }
+  .lot-sub { font-size: 13px; color: #888; margin-top: 2px; }
+  .lot-time { font-size: 12px; color: #bbb; direction: ltr; flex-shrink: 0; }
+  .badge { font-size: 12px; padding: 3px 11px; border-radius: 999px; font-weight: 500; flex-shrink: 0; }
+  .badge-green { background: #E1F5EE; color: #0F6E56; }
+  .badge-yellow { background: #FAEEDA; color: #854F0B; }
+  .badge-red { background: #FAECE7; color: #993C1D; }
+  .badge-blue { background: #E6F1FB; color: #185FA5; }
+  .badge-gray { background: #f0f0ed; color: #555; }
+
+  .gray-note { background: #f0f0ed; border-radius: 10px; padding: 11px 14px; font-size: 13px; color: #555; margin-bottom: 14px; line-height: 1.6; }
+
+  .divider { height: 1px; background: #e8e8e4; margin: 2rem 0; }
+
+  .section-title { font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+  .section-sub { font-size: 13px; color: #888; margin-bottom: 14px; }
+
+  select { width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid #e0e0dc; background: #fff; color: #1a1a1a; font-family: 'Heebo', sans-serif; font-size: 14px; margin-bottom: 10px; appearance: none; cursor: pointer; }
+  .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .report-btn { padding: 18px 12px; border-radius: 14px; border: 1px solid #e0e0dc; background: #fff; cursor: pointer; text-align: center; font-size: 14px; font-weight: 500; color: #1a1a1a; font-family: 'Heebo', sans-serif; transition: all 0.15s; }
+  .btn-icon { font-size: 26px; display: block; margin-bottom: 6px; }
+  .submit-btn { width: 100%; padding: 14px; border-radius: 10px; border: none; background: #555; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Heebo', sans-serif; transition: background 0.15s; }
+  .submit-btn:hover { background: #333; }
+  .submit-btn:disabled { background: #ccc; cursor: default; }
+
+  /* Floating CTA - mobile sticky */
+  .floating-cta { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(8px); border-top: 1px solid #e0e0dc; padding: 12px 16px; z-index: 200; box-shadow: 0 -4px 20px rgba(0,0,0,0.06); }
+  .floating-cta button { width: 100%; max-width: 568px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 15px; border-radius: 12px; border: none; background: #1D9E75; color: #fff; font-size: 16px; font-weight: 800; cursor: pointer; font-family: 'Heebo', sans-serif; transition: background 0.2s; }
+  .floating-cta button:hover { background: #0F6E56; }
+
+  .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1a1a1a; color: #fff; padding: 12px 22px; border-radius: 999px; font-size: 14px; font-weight: 500; transition: transform 0.3s ease; z-index: 999; white-space: nowrap; font-family: 'Heebo', sans-serif; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  .footer-note { max-width: 600px; margin: 2rem auto 0; padding: 0 1rem 2rem; text-align: center; }
+  .footer-note p { font-size: 11px; color: #aaa; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="prototype-banner">
+  <strong style="font-weight:800;">⚠️ שימו לב</strong> - זהו אתר לבדיקת רעיון עסקי של הסטודנטים Shlomi Kantarzy ו-Tal Arad. הנתונים המוצגים הם המחשה בלבד ולא מידע אמיתי בזמן אמת
+</div>
+<div class="container">
+
+  <div class="hero">
+    <div class="logo-badge">ParkAlert Downtown Haifa</div>
+    <div class="campus-tag">הקריה האקדמית אונו - קמפוס חיפה, העיר התחתית</div>
+    <h1>חנייה פנויה <span>עכשיו</span></h1>
+    <p class="subtitle">כל אפשרויות החנייה באזור קמפוס אונו בעיר התחתית - דיווח שיתופי בזמן אמת</p>
+    <div class="address-line">חניון הקמפוס פעיל 06:00–00:00</div>
+  </div>
+
+  <div class="problem-box">
+    <div class="problem-stat">12 דקות</div>
+    <div class="problem-text">בממוצע מבזבז סטודנט ביום בחיפוש חנייה סביב הקמפוס.<br>ParkAlert בא לפתור את זה.</div>
+  </div>
+
+  <!-- Waitlist HERO - moved up -->
+  <div class="waitlist-box" id="waitlist-form">
+    <span class="wl-badge">בקרוב</span>
+    <strong>הרעיון מעניין אותך?</strong>
+    <p class="wl-sub">ParkAlert תהיה אפליקציה שתראה לך בזמן אמת אילו חניות פנויות סביב קמפוס אונו - על בסיס דיווחי משתמשים. אנחנו בודקים עניין לפני ההשקה. ענה על 2 שאלות קצרות והשאר פרטים, ונעדכן אותך כשהמוצר יוצא לאוויר.</p>
+
+    <span class="wl-label">מי אתה?</span>
+    <div class="user-type-grid">
+      <button class="user-type-btn" onclick="selectUserType(this, 'student')">
+        <span class="user-type-emoji">🎓</span>
+        <span class="user-type-text">סטודנט/ית אונו</span>
+      </button>
+      <button class="user-type-btn" onclick="selectUserType(this, 'staff')">
+        <span class="user-type-emoji">💼</span>
+        <span class="user-type-text">עובד/ת קמפוס</span>
+      </button>
+      <button class="user-type-btn" onclick="selectUserType(this, 'visitor')">
+        <span class="user-type-emoji">🗺️</span>
+        <span class="user-type-text">מבקר/ת עיר תחתית</span>
+      </button>
+    </div>
+
+    <span class="wl-label">כמה זמן אתה מבזבז בממוצע על חיפוש חנייה?</span>
+    <div class="time-options">
+      <button class="time-opt" onclick="selectTime(this, 'under5')">פחות מ-5 דקות</button>
+      <button class="time-opt" onclick="selectTime(this, '5to10')">5–10 דקות</button>
+      <button class="time-opt" onclick="selectTime(this, '10to20')">10–20 דקות</button>
+      <button class="time-opt" onclick="selectTime(this, 'over20')">יותר מ-20 דקות</button>
+    </div>
+
+    <span class="wl-label">השאר מספר טלפון ונעדכן אותך כשהמוצר מושק</span>
+    <div class="waitlist-row">
+      <input type="tel" placeholder="050-0000000" id="phone-input" />
+    </div>
+    <button class="wl-submit" onclick="submitWaitlist()">
+      <span>אני רוצה לדעת כשזה יוצא!</span>
+      <span class="wl-arrow">←</span>
+    </button>
+    <p class="counter" id="join-counter">כבר 47 אנשים הביעו עניין!</p>
+  </div>
+
+  <div class="success-box" id="success-box">
+    <div class="s-emoji">🎉</div>
+    <strong>תודה רבה!</strong>
+    <p>נעדכן אותך בוואטסאפ כש-ParkAlert Downtown Haifa יוצא לאוויר</p>
+  </div>
+
+  <div class="how-it-works">
+    <div class="hiw-title">איך זה עובד?</div>
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <span class="hiw-num">1</span>
+        <span class="hiw-text">ראה בזמן אמת אילו חניות פנויות סביב הקמפוס</span>
+      </div>
+      <div class="hiw-step">
+        <span class="hiw-num">2</span>
+        <span class="hiw-text">מידע מבוסס על דיווחי משתמשים - סטודנטים ועובדים שמדווחים מהשטח</span>
+      </div>
+      <div class="hiw-step">
+        <span class="hiw-num">3</span>
+        <span class="hiw-text">גם אתה יכול לתרום - דווח על מצב החנייה ותעזור לאחרים לחסוך זמן</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="demo-title">דוגמה לאיך האפליקציה תיראה בפעולה</div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num green" id="free-count">22</div>
+      <div class="stat-label">מקומות פנויים</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num red" id="taken-count">41</div>
+      <div class="stat-label">מקומות תפוסים</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="report-count">31</div>
+      <div class="stat-label">דיווחים היום</div>
+    </div>
+  </div>
+
+  <div class="tabs-title">בחר את סוג החנייה שמעניין אותך</div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('official')"><span class="tab-emoji">🏢</span><span class="tab-label">חניון קמפוס</span></button>
+    <button class="tab" onclick="switchTab('pango')"><span class="tab-emoji">🚉</span><span class="tab-label">חניון רכבת</span></button>
+    <button class="tab" onclick="switchTab('gray')"><span class="tab-emoji">🅿️</span><span class="tab-label">חניות אפורות</span></button>
+  </div>
+
+  <div class="tab-content active" id="tab-official">
+    <div class="section-label">חניון קמפוס אונו</div>
+    <div class="lot-card">
+      <div class="dot dot-green"></div>
+      <div class="lot-info"><div class="lot-name">כניסה ראשית - רחוב פלייטנר</div><div class="lot-sub">~5 מקומות פנויים</div></div>
+      <span class="badge badge-green">פנוי</span><div class="lot-time">3 דק'</div>
+    </div>
+    <div class="lot-card">
+      <div class="dot dot-yellow"></div>
+      <div class="lot-info"><div class="lot-name">כניסה משנית - צד הנמל</div><div class="lot-sub">~2 מקומות פנויים</div></div>
+      <span class="badge badge-yellow">כמעט מלא</span><div class="lot-time">7 דק'</div>
+    </div>
+    <div class="lot-card">
+      <div class="dot dot-red"></div>
+      <div class="lot-info"><div class="lot-name">חניון תת-קרקעי</div><div class="lot-sub">אין מקומות פנויים</div></div>
+      <span class="badge badge-red">מלא</span><div class="lot-time">11 דק'</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-pango">
+    <div class="section-label">חניון תחנת רכבת חיפה - תשלום בפנגו</div>
+    <div class="lot-card">
+      <div class="dot dot-green"></div>
+      <div class="lot-info"><div class="lot-name">חניון רכבת - קומה א</div><div class="lot-sub">פנגו • ~8 מקומות פנויים</div></div>
+      <span class="badge badge-blue">פנגו</span><div class="lot-time">2 דק'</div>
+    </div>
+    <div class="lot-card">
+      <div class="dot dot-yellow"></div>
+      <div class="lot-info"><div class="lot-name">חניון רכבת - קומה ב</div><div class="lot-sub">פנגו • ~3 מקומות פנויים</div></div>
+      <span class="badge badge-blue">פנגו</span><div class="lot-time">9 דק'</div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-gray">
+    <div class="gray-note"><strong style="display:inline;font-weight:700;">חניות אפורות - מאחורי מבנה הקמפוס</strong><br>חניות ברחוב ללא תשלום. זמינות משתנה. ודא שהחנייה מותרת לפני העצירה.</div>
+    <div class="section-label">אזורי חנייה אפורים</div>
+    <div class="lot-card">
+      <div class="dot dot-green"></div>
+      <div class="lot-info"><div class="lot-name">חנייה אפורה - מעבר לבניין הראשי</div><div class="lot-sub">ללא תשלום • ~4 מקומות</div></div>
+      <span class="badge badge-gray">אפורה</span><div class="lot-time">5 דק'</div>
+    </div>
+    <div class="lot-card">
+      <div class="dot dot-red"></div>
+      <div class="lot-info"><div class="lot-name">חנייה אפורה - רחוב צדדי דרומי</div><div class="lot-sub">ללא תשלום • אין מקום כרגע</div></div>
+      <span class="badge badge-red">מלא</span><div class="lot-time">14 דק'</div>
+    </div>
+    <div class="lot-card">
+      <div class="dot dot-yellow"></div>
+      <div class="lot-info"><div class="lot-name">חנייה אפורה - כיכר הסמוכה</div><div class="lot-sub">ללא תשלום • ~2 מקומות</div></div>
+      <span class="badge badge-yellow">כמעט מלא</span><div class="lot-time">8 דק'</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">דווח עכשיו - עזור לאחרים</div>
+  <div class="section-sub">בחר מיקום ודווח על המצב הנוכחי</div>
+  <select id="lot-select">
+    <option value="">בחר מיקום חנייה...</option>
+    <optgroup label="חניון קמפוס">
+      <option value="o1">כניסה ראשית - רחוב פלייטנר</option>
+      <option value="o2">כניסה משנית - צד הנמל</option>
+      <option value="o3">חניון תת-קרקעי</option>
+    </optgroup>
+    <optgroup label="חניון רכבת (פנגו)">
+      <option value="p1">חניון רכבת - קומה א</option>
+      <option value="p2">חניון רכבת - קומה ב</option>
+    </optgroup>
+    <optgroup label="חניות אפורות">
+      <option value="g1">חנייה אפורה - מעבר לבניין הראשי</option>
+      <option value="g2">חנייה אפורה - רחוב צדדי דרומי</option>
+      <option value="g3">חנייה אפורה - כיכר הסמוכה</option>
+    </optgroup>
+  </select>
+  <div class="report-grid">
+    <button class="report-btn" id="btn-free"><span class="btn-icon">✅</span>יש מקום!</button>
+    <button class="report-btn" id="btn-taken"><span class="btn-icon">❌</span>אין מקום</button>
+  </div>
+  <button class="submit-btn" id="submit-btn" disabled>שלח דיווח</button>
+
+</div>
+
+<div class="footer-note">
+  <p>המידע באתר מבוסס על דיווחי משתמשים בזמן אמת ואינו מידע רשמי. ParkAlert אינה אחראית לדיוק הנתונים, לזמינות מקומות החנייה, או לכל קנס/דו״ח שיתקבל כתוצאה מחנייה באזורים המוצגים. לחניות האפורות - ודא תמיד שהחנייה מותרת לפני העצירה.<br><br>© ParkAlert Downtown Haifa 2026<br><span style="display:inline-block;margin-top:8px;font-size:13px;color:#0F6E56;font-weight:700;">נבנה על ידי הסטודנטים Shlomi Kantarzy ו-Tal Arad<br>כחלק מקורס יזמות וחדשנות עסקית בקריה האקדמית אונו</span></p>
+</div>
+
+<!-- Floating CTA -->
+<div class="floating-cta" id="floating-cta">
+  <button onclick="scrollToForm()">
+    <span>אני רוצה לדעת כשזה יוצא!</span>
+    <span>←</span>
+  </button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  let selectedLot = '', selectedStatus = '', selectedTime = '', selectedUserType = '', joinCount = 47;
+  const submitBtn = document.getElementById('submit-btn');
+  const freeEl = document.getElementById('free-count');
+  const takenEl = document.getElementById('taken-count');
+  const reportEl = document.getElementById('report-count');
+  const toast = document.getElementById('toast');
+
+  function scrollToForm() {
+    document.getElementById('waitlist-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => document.getElementById('phone-input').focus({ preventScroll: true }), 600);
+  }
+
+  function switchTab(name) {
+    const names = ['official','pango','gray'];
+    document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i] === name));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+  }
+
+  function checkReady() { submitBtn.disabled = !(selectedLot && selectedStatus); }
+
+  document.getElementById('lot-select').addEventListener('change', function() { selectedLot = this.value; checkReady(); });
+
+  document.getElementById('btn-free').addEventListener('click', function() {
+    selectedStatus = 'free';
+    this.style.borderColor = '#1D9E75'; this.style.background = '#E1F5EE';
+    const o = document.getElementById('btn-taken'); o.style.borderColor = ''; o.style.background = '';
+    checkReady();
+  });
+
+  document.getElementById('btn-taken').addEventListener('click', function() {
+    selectedStatus = 'taken';
+    this.style.borderColor = '#D85A30'; this.style.background = '#FAECE7';
+    const o = document.getElementById('btn-free'); o.style.borderColor = ''; o.style.background = '';
+    checkReady();
+  });
+
+  document.getElementById('submit-btn').addEventListener('click', function() {
+    if (!selectedLot || !selectedStatus) return;
+    let f = parseInt(freeEl.textContent), t = parseInt(takenEl.textContent), r = parseInt(reportEl.textContent);
+    if (selectedStatus === 'free') { freeEl.textContent = f + 1; takenEl.textContent = Math.max(0, t - 1); }
+    else { takenEl.textContent = t + 1; freeEl.textContent = Math.max(0, f - 1); }
+    reportEl.textContent = r + 1;
+    showToast('דיווח נשלח - תודה!');
+    selectedLot = ''; selectedStatus = '';
+    document.getElementById('lot-select').value = '';
+    ['btn-free','btn-taken'].forEach(id => {
+      document.getElementById(id).style.borderColor = '';
+      document.getElementById(id).style.background = '';
+    });
+    checkReady();
+  });
+
+  function selectUserType(el, val) {
+    selectedUserType = val;
+    document.querySelectorAll('.user-type-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function selectTime(el, val) {
+    selectedTime = val;
+    document.querySelectorAll('.time-opt').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function submitWaitlist() {
+    const phone = document.getElementById('phone-input').value.trim();
+    if (!selectedUserType) { showToast('נא לבחור מי אתה'); return; }
+    if (!selectedTime) { showToast('נא לבחור כמה זמן אתה מבזבז'); return; }
+    if (!phone) { showToast('נא להכניס מספר טלפון'); return; }
+    document.getElementById('waitlist-form').style.display = 'none';
+    document.getElementById('floating-cta').style.display = 'none';
+    const sb = document.getElementById('success-box');
+    sb.style.display = 'block';
+    sb.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    joinCount++;
+  }
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+</script>
+</body>
+</html>
