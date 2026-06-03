@@ -362,6 +362,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   const toast = document.getElementById('toast');
 
   function scrollToForm() {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: 'floating_cta_click' });
     document.getElementById('waitlist-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
     setTimeout(() => document.getElementById('phone-input').focus({ preventScroll: true }), 600);
   }
