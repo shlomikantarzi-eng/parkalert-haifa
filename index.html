@@ -46,7 +46,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .problem-text { font-size: 14px; opacity: 0.95; line-height: 1.5; }
 
   /* Waitlist HERO - now near top */
-  .waitlist-box { background: #fff; border: 2.5px solid #1D9E75; border-radius: 18px; padding: 24px 22px; box-shadow: 0 6px 28px rgba(29,158,117,0.15); margin-bottom: 1.5rem; }
+  .waitlist-box { background: #fff; border: 2.5px solid #1D9E75; border-radius: 18px; padding: 24px 22px; box-shadow: 0 6px 28px rgba(29,158,117,0.15); margin-bottom: 1.5rem; animation: formGlow 2.6s ease-in-out infinite; }
+  @keyframes formGlow {
+    0%, 100% { box-shadow: 0 6px 24px rgba(29,158,117,0.16); border-color: #1D9E75; }
+    50% { box-shadow: 0 8px 38px rgba(29,158,117,0.42); border-color: #16b07f; }
+  }
+  @media (prefers-reduced-motion: reduce) { .waitlist-box { animation: none; } }
   .wl-badge { display: inline-block; background: #E1F5EE; color: #0F6E56; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 999px; margin-bottom: 12px; }
   .waitlist-box strong { font-size: 21px; font-weight: 800; color: #1a1a1a; display: block; margin-bottom: 6px; line-height: 1.3; }
   .wl-sub { font-size: 14px; color: #666; margin-bottom: 20px; line-height: 1.6; }
@@ -143,8 +148,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .floating-cta button { width: 100%; max-width: 568px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 15px; border-radius: 12px; border: none; background: #1D9E75; color: #fff; font-size: 16px; font-weight: 800; cursor: pointer; font-family: 'Heebo', sans-serif; transition: background 0.2s; }
   .floating-cta button:hover { background: #0F6E56; }
 
-  .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1a1a1a; color: #fff; padding: 12px 22px; border-radius: 999px; font-size: 14px; font-weight: 500; transition: transform 0.3s ease; z-index: 999; white-space: nowrap; font-family: 'Heebo', sans-serif; }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1a1a1a; color: #fff; padding: 12px 22px; border-radius: 999px; font-size: 14px; font-weight: 500; transition: transform 0.3s ease, opacity 0.3s ease; z-index: 999; white-space: nowrap; font-family: 'Heebo', sans-serif; opacity: 0; pointer-events: none; }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
   .footer-note { max-width: 600px; margin: 2rem auto 0; padding: 0 1rem 2rem; text-align: center; }
   .footer-note p { font-size: 11px; color: #aaa; line-height: 1.7; }
@@ -304,8 +309,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div class="parking-map-section">
     <div class="parking-map-title">📍 מפת החניונים באזור הקמפוס</div>
-    <a href="https://www.google.com/maps/place/%D7%94%D7%A7%D7%A8%D7%99%D7%94+%D7%94%D7%90%D7%A7%D7%93%D7%9E%D7%99%D7%AA+%D7%90%D7%95%D7%A0%D7%95+%D7%A7%D7%9E%D7%A4%D7%95%D7%A1+%D7%97%D7%99%D7%A4%D7%94/@32.8198463,34.9996775,17z" target="_blank" style="display:block;background:#E1F5EE;border:1px solid #1D9E75;border-radius:14px;padding:20px;text-align:center;color:#0F6E56;font-weight:700;font-size:15px;text-decoration:none;font-family:Heebo,sans-serif;">
-      🗺️ פתח מפת חניונים ב-Google Maps
+    <iframe
+      title="מפת אזור קמפוס אונו חיפה"
+      src="https://maps.google.com/maps?q=32.8198463,34.9996775&z=16&hl=iw&output=embed"
+      width="100%" height="240" style="border:0;border-radius:14px;border:1px solid #e0e0dc;display:block;"
+      loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <a href="https://www.google.com/maps/place/%D7%94%D7%A7%D7%A8%D7%99%D7%94+%D7%94%D7%90%D7%A7%D7%93%D7%9E%D7%99%D7%AA+%D7%90%D7%95%D7%A0%D7%95+%D7%A7%D7%9E%D7%A4%D7%95%D7%A1+%D7%97%D7%99%D7%A4%D7%94/@32.8198463,34.9996775,17z" target="_blank" rel="noopener" style="display:block;text-align:center;color:#0F6E56;font-weight:500;font-size:12px;text-decoration:none;margin-top:8px;">
+      🗺️ פתח במסך מלא ב-Google Maps ←
     </a>
     <div class="map-legend">
       <div class="legend-item"><div class="legend-dot" style="background:#1D9E75"></div>פנוי</div>
