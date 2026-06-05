@@ -156,11 +156,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .campus-photo-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(15,110,86,0.3) 0%, transparent 70%); }
   .campus-photo-label { position: absolute; bottom: 10px; right: 14px; z-index: 1; font-size: 12px; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
 
-  /* Hero Map Background */
-  .hero-map-wrap { position: relative; overflow: hidden; margin-bottom: 0; }
-  #hero-map { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; filter: saturate(0.4) brightness(0.55); }
-  .hero-map-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(245,245,243,0.1) 0%, rgba(245,245,243,0.65) 60%, rgba(245,245,243,1) 100%); z-index: 1; }
-  .hero-map-wrap .hero { position: relative; z-index: 2; padding-top: 1.5rem; padding-bottom: 1rem; min-height: 0; }
+  /* Hero */
+  .hero-map-wrap { background: #f5f5f3; margin-bottom: 0; }
+  .hero-map-wrap .hero { padding-top: 1.5rem; padding-bottom: 0.8rem; }
 
   /* Photo strip — single panoramic */
   .photo-strip { position: relative; margin: 0 0 1.4rem; overflow: hidden; }
@@ -189,8 +187,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <strong style="font-weight:800;">⚠️ שימו לב</strong> - זהו אתר לבדיקת רעיון עסקי של הסטודנטים Shlomi Kantarzy ו-Tal Arad. הנתונים המוצגים הם המחשה בלבד ולא מידע אמיתי בזמן אמת
 </div>
 <div class="hero-map-wrap">
-  <div id="hero-map"></div>
-  <div class="hero-map-overlay"></div>
   <div class="container">
   <div class="hero">
     <div class="logo-badge">ParkAlert Downtown Haifa</div>
@@ -420,11 +416,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="toast" id="toast"></div>
 
 <script>
-  // ── Hero background map ──
-  const heroMap = L.map('hero-map', { zoomControl: false, dragging: false, scrollWheelZoom: false, attributionControl: false });
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(heroMap);
-  heroMap.setView([32.8198, 34.9997], 15);
-
   // ── Parking lots map ──
   const parkMap = L.map('parking-map', { zoomControl: true, attributionControl: false });
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(parkMap);
