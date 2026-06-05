@@ -429,52 +429,53 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="toast" id="toast"></div>
 
 <script>
-  // ── Parking lots map ──
-  const isMobile = window.innerWidth < 600;
-  const parkMap = L.map('parking-map', {
-    zoomControl: true,
-    attributionControl: false,
-    dragging: !isMobile,
-    tap: !isMobile,
-    scrollWheelZoom: false,
-    touchZoom: !isMobile
-  });
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(parkMap);
-  parkMap.setView([32.8198, 34.9997], 16);
-
-  function makeIcon(color) {
-    return L.divIcon({
-      className: '',
-      html: `<div style="width:16px;height:16px;border-radius:50%;background:${color};border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3)"></div>`,
-      iconSize: [16, 16], iconAnchor: [8, 8]
+  // ── Parking lots map — init after page load ──
+  window.addEventListener('load', function() {
+    const isMobile = window.innerWidth < 600;
+    const parkMap = L.map('parking-map', {
+      zoomControl: true,
+      attributionControl: false,
+      dragging: !isMobile,
+      tap: !isMobile,
+      scrollWheelZoom: false,
+      touchZoom: !isMobile
     });
-  }
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { keepBuffer: 0 }).addTo(parkMap);
+    parkMap.setView([32.8198, 34.9997], 16);
 
-  const lots = [
-    { lat: 32.8202, lng: 34.9993, name: 'כניסה ראשית - רחוב פלייטנר', status: 'פנוי', color: '#1D9E75' },
-    { lat: 32.8195, lng: 35.0005, name: 'כניסה משנית - צד הנמל', status: 'כמעט מלא', color: '#EF9F27' },
-    { lat: 32.8198, lng: 34.9990, name: 'חניון תת-קרקעי', status: 'מלא', color: '#D85A30' },
-    { lat: 32.8210, lng: 35.0012, name: 'חניון רכבת - קומה א', status: 'פנוי | פנגו', color: '#185FA5' },
-    { lat: 32.8205, lng: 35.0018, name: 'חניון רכבת - קומה ב', status: 'כמעט מלא | פנגו', color: '#185FA5' },
-    { lat: 32.8188, lng: 34.9985, name: 'חנייה אפורה - מעבר לבניין הראשי', status: 'פנוי', color: '#1D9E75' },
-    { lat: 32.8182, lng: 34.9995, name: 'חנייה אפורה - רחוב צדדי דרומי', status: 'מלא', color: '#D85A30' },
-    { lat: 32.8192, lng: 35.0008, name: 'חנייה אפורה - כיכר הסמוכה', status: 'כמעט מלא', color: '#EF9F27' },
-  ];
+    function makeIcon(color) {
+      return L.divIcon({
+        className: '',
+        html: `<div style="width:16px;height:16px;border-radius:50%;background:${color};border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3)"></div>`,
+        iconSize: [16, 16], iconAnchor: [8, 8]
+      });
+    }
 
-  lots.forEach(lot => {
-    L.marker([lot.lat, lot.lng], { icon: makeIcon(lot.color) })
-      .addTo(parkMap)
-      .bindPopup(`<div style="font-family:Heebo,sans-serif;direction:rtl;text-align:right;font-size:13px"><strong>${lot.name}</strong><br><span style="color:${lot.color}">${lot.status}</span></div>`);
+    const lots = [
+      { lat: 32.8202, lng: 34.9993, name: 'כניסה ראשית - רחוב פלייטנר', status: 'פנוי', color: '#1D9E75' },
+      { lat: 32.8195, lng: 35.0005, name: 'כניסה משנית - צד הנמל', status: 'כמעט מלא', color: '#EF9F27' },
+      { lat: 32.8198, lng: 34.9990, name: 'חניון תת-קרקעי', status: 'מלא', color: '#D85A30' },
+      { lat: 32.8210, lng: 35.0012, name: 'חניון רכבת - קומה א', status: 'פנוי | פנגו', color: '#185FA5' },
+      { lat: 32.8205, lng: 35.0018, name: 'חניון רכבת - קומה ב', status: 'כמעט מלא | פנגו', color: '#185FA5' },
+      { lat: 32.8188, lng: 34.9985, name: 'חנייה אפורה - מעבר לבניין הראשי', status: 'פנוי', color: '#1D9E75' },
+      { lat: 32.8182, lng: 34.9995, name: 'חנייה אפורה - רחוב צדדי דרומי', status: 'מלא', color: '#D85A30' },
+      { lat: 32.8192, lng: 35.0008, name: 'חנייה אפורה - כיכר הסמוכה', status: 'כמעט מלא', color: '#EF9F27' },
+    ];
+
+    lots.forEach(lot => {
+      L.marker([lot.lat, lot.lng], { icon: makeIcon(lot.color) })
+        .addTo(parkMap)
+        .bindPopup(`<div style="font-family:Heebo,sans-serif;direction:rtl;text-align:right;font-size:13px"><strong>${lot.name}</strong><br><span style="color:${lot.color}">${lot.status}</span></div>`);
+    });
+
+    L.marker([32.8198, 34.9997], {
+      icon: L.divIcon({
+        className: '',
+        html: `<div style="background:#1a1a1a;color:#fff;font-family:Heebo,sans-serif;font-size:11px;font-weight:700;padding:4px 8px;border-radius:8px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.3)">🎓 קמפוס אונו</div>`,
+        iconAnchor: [40, 10]
+      })
+    }).addTo(parkMap);
   });
-
-  // Campus marker
-  L.marker([32.8198, 34.9997], {
-    icon: L.divIcon({
-      className: '',
-      html: `<div style="background:#1a1a1a;color:#fff;font-family:Heebo,sans-serif;font-size:11px;font-weight:700;padding:4px 8px;border-radius:8px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.3)">🎓 קמפוס אונו</div>`,
-      iconAnchor: [40, 10]
-    })
-  }).addTo(parkMap);
 
   let selectedLot = '', selectedStatus = '', selectedTime = '', selectedUserType = '', joinCount = 47;
   const submitBtn = document.getElementById('submit-btn');
