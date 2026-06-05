@@ -145,8 +145,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .footer-note p { font-size: 11px; color: #aaa; line-height: 1.7; }
 
   /* Photo strip */
-  .photo-strip { display: flex; gap: 8px; padding: 0 1rem; margin-bottom: 1.2rem; overflow: hidden; }
-  .photo-strip img { flex: 1; height: 110px; object-fit: cover; border-radius: 12px; min-width: 0; filter: brightness(0.88) saturate(0.9); }
+  .photo-strip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 1rem; margin-bottom: 1.4rem; }
+  .photo-strip-item { position: relative; border-radius: 14px; overflow: hidden; aspect-ratio: 4/3; }
+  .photo-strip-item img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; filter: brightness(0.85) saturate(0.85); transition: transform 0.3s ease; }
+  .photo-strip-item:hover img { transform: scale(1.04); }
+  .photo-strip-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.25) 0%, transparent 60%); border-radius: 14px; }
+  @media (max-width: 480px) {
+    .photo-strip { grid-template-columns: 1fr 1fr; }
+    .photo-strip-item:last-child { display: none; }
+  }
 
   /* Problem box with photo bg */
   .problem-box { position: relative; overflow: hidden; }
@@ -154,7 +161,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .problem-box-content { position: relative; z-index: 1; }
 
   /* Campus photo in how-it-works */
-  .campus-photo { width: 100%; height: 140px; object-fit: cover; border-radius: 10px; margin-bottom: 14px; filter: brightness(0.9) saturate(0.85); }
+  .campus-photo-wrap { position: relative; border-radius: 12px; overflow: hidden; margin-bottom: 16px; aspect-ratio: 16/6; }
+  .campus-photo { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; display: block; filter: brightness(0.88) saturate(0.85); }
+  .campus-photo-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(15,110,86,0.3) 0%, transparent 70%); }
+  .campus-photo-label { position: absolute; bottom: 10px; right: 14px; z-index: 1; font-size: 12px; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
 
   /* Hero Map Background */
   .hero-map-wrap { position: relative; overflow: hidden; margin-bottom: 0; }
@@ -195,9 +205,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- Photo strip -->
 <div class="photo-strip">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/93793_paris_square_haifa_PikiWiki_Israel.jpg/960px-93793_paris_square_haifa_PikiWiki_Israel.jpg" alt="כיכר פריז עיר תחתית חיפה" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/94634_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg/960px-94634_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg" alt="מרכז מסחרי עיר תחתית חיפה" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/94633_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg/960px-94633_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg" alt="עיר תחתית חיפה" />
+  <div class="photo-strip-item">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/93793_paris_square_haifa_PikiWiki_Israel.jpg/960px-93793_paris_square_haifa_PikiWiki_Israel.jpg" alt="כיכר פריז עיר תחתית חיפה" />
+  </div>
+  <div class="photo-strip-item">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/94634_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg/960px-94634_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg" alt="מרכז מסחרי עיר תחתית חיפה" style="object-position: center 20%;" />
+  </div>
+  <div class="photo-strip-item">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/94633_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg/960px-94633_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg" alt="עיר תחתית חיפה" />
+  </div>
 </div>
 
 <div class="container">
@@ -257,7 +273,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <div class="how-it-works">
-    <img src="https://web5.ono.ac.il/wp-content/uploads/2024/10/h3.png" alt="קמפוס אונו חיפה עיר תחתית" class="campus-photo" />
+    <div class="campus-photo-wrap">
+      <img src="https://web5.ono.ac.il/wp-content/uploads/2024/10/h3.png" alt="קמפוס אונו חיפה עיר תחתית" class="campus-photo" />
+      <span class="campus-photo-label">📍 קמפוס אונו — עיר תחתית חיפה</span>
+    </div>
     <div class="hiw-title">איך זה עובד?</div>
     <div class="hiw-steps">
       <div class="hiw-step">
