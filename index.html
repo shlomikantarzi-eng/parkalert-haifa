@@ -129,8 +129,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   .divider { height: 1px; background: #e8e8e4; margin: 1rem 0; }
 
-  .section-title { font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
-  .section-sub { font-size: 13px; color: #888; margin-bottom: 14px; }
+  .section-title { font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; text-align: center; }
+  .section-sub { font-size: 13px; color: #888; margin-bottom: 14px; text-align: center; }
 
   select { width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid #e0e0dc; background: #fff; color: #1a1a1a; font-family: 'Heebo', sans-serif; font-size: 14px; margin-bottom: 10px; appearance: none; cursor: pointer; }
   .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
@@ -169,11 +169,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   /* Photo strip — single panoramic */
   .photo-strip { position: relative; margin: 0 0 1.4rem; overflow: hidden; }
-  .photo-strip img { width: 100%; height: 260px; object-fit: cover; object-position: center 60%; display: block; filter: brightness(0.85) saturate(0.85); }
+  .photo-strip img { width: 100%; height: 260px; object-fit: cover; object-position: center 75%; display: block; filter: brightness(0.85) saturate(0.85); }
   .photo-strip-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(245,245,243,0.15) 0%, transparent 15%, transparent 85%, rgba(245,245,243,0.5) 100%); pointer-events: none; }
   @media (min-width: 600px) {
     .photo-strip { margin: 0 1rem 1.4rem; border-radius: 14px; }
     .photo-strip img { height: 240px; object-position: center 60%; }
+    .hero-map-wrap .container { padding-bottom: 0.6rem; }
   }
 
   /* Parking Map */
