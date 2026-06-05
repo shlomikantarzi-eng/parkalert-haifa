@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ParkAlert Downtown Haifa - קמפוס אונו</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -46,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .problem-text { font-size: 14px; opacity: 0.95; line-height: 1.5; }
 
   /* Waitlist HERO - now near top */
-  .waitlist-box { background: #fff; border: 2.5px solid #1D9E75; border-radius: 18px; padding: 24px 22px; box-shadow: 0 6px 28px rgba(29,158,117,0.15); margin-bottom: 1.5rem; animation: formGlow 2.6s ease-in-out infinite; }
+  .waitlist-box { background: #fff; border: 2.5px solid #1D9E75; border-radius: 18px; padding: 24px 22px; box-shadow: 0 6px 28px rgba(29,158,117,0.15); margin-bottom: 1.5rem; animation: formGlow 2.6s ease-in-out infinite; text-align: center; }
   @keyframes formGlow {
     0%, 100% { box-shadow: 0 6px 24px rgba(29,158,117,0.16); border-color: #1D9E75; }
     50% { box-shadow: 0 8px 38px rgba(29,158,117,0.42); border-color: #16b07f; }
@@ -309,11 +311,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div class="parking-map-section">
     <div class="parking-map-title">📍 מפת החניונים באזור הקמפוס</div>
-    <iframe
-      title="מפת אזור קמפוס אונו חיפה"
-      src="https://maps.google.com/maps?q=32.8198463,34.9996775&z=16&hl=iw&output=embed"
-      width="100%" height="240" style="border:0;border-radius:14px;border:1px solid #e0e0dc;display:block;"
-      loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div id="parking-map"></div>
     <a href="https://www.google.com/maps/place/%D7%94%D7%A7%D7%A8%D7%99%D7%94+%D7%94%D7%90%D7%A7%D7%93%D7%9E%D7%99%D7%AA+%D7%90%D7%95%D7%A0%D7%95+%D7%A7%D7%9E%D7%A4%D7%95%D7%A1+%D7%97%D7%99%D7%A4%D7%94/@32.8198463,34.9996775,17z" target="_blank" rel="noopener" style="display:block;text-align:center;color:#0F6E56;font-weight:500;font-size:12px;text-decoration:none;margin-top:8px;">
       🗺️ פתח במסך מלא ב-Google Maps ←
     </a>
@@ -439,6 +437,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="toast" id="toast"></div>
 
 <script>
+  // ── Parking lots map (Leaflet) — init after load so it never blocks the page ──
+  window.addEventListener('load', function() {
+    if (typeof L === 'undefined' || !document.getElementById('parking-map')) return;
+    const isMobile = window.innerWidth < 600;
+    const parkMap = L.map('parking-map', {
+      zoomControl: true, attributionControl: false,
+      dragging: !isMobile, tap: !isMobile, scrollWheelZoom: false, touchZoom: !isMobile
+    }).setView([32.8198, 34.9997], 16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(parkMap);
+
+    const dot = c => L.divIcon({ className: '', iconSize: [16,16], iconAnchor: [8,8],
+      html: `<div style="width:16px;height:16px;border-radius:50%;background:${c};border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.35)"></div>` });
+
+    const lots = [
+      { lat:32.8202, lng:34.9993, name:'כניסה ראשית - רחוב פלייטנר', status:'פנוי', color:'#1D9E75' },
+      { lat:32.8195, lng:35.0005, name:'כניסה משנית - צד הנמל', status:'כמעט מלא', color:'#EF9F27' },
+      { lat:32.8198, lng:34.9990, name:'חניון תת-קרקעי', status:'מלא', color:'#D85A30' },
+      { lat:32.8210, lng:35.0012, name:'חניון רכבת - קומה א', status:'פנוי · פנגו', color:'#185FA5' },
+      { lat:32.8205, lng:35.0018, name:'חניון רכבת - קומה ב', status:'כמעט מלא · פנגו', color:'#185FA5' },
+      { lat:32.8188, lng:34.9985, name:'חנייה אפורה - מעבר לבניין הראשי', status:'פנוי', color:'#1D9E75' },
+      { lat:32.8182, lng:34.9995, name:'חנייה אפורה - רחוב צדדי דרומי', status:'מלא', color:'#D85A30' },
+      { lat:32.8192, lng:35.0008, name:'חנייה אפורה - כיכר הסמוכה', status:'כמעט מלא', color:'#EF9F27' }
+    ];
+    lots.forEach(l => L.marker([l.lat,l.lng], { icon: dot(l.color) }).addTo(parkMap)
+      .bindPopup(`<div style="font-family:Heebo,sans-serif;direction:rtl;text-align:right;font-size:13px"><strong>${l.name}</strong><br><span style="color:${l.color}">${l.status}</span></div>`));
+
+    L.marker([32.8198,34.9997], { icon: L.divIcon({ className:'', iconAnchor:[42,10],
+      html:`<div style="background:#1a1a1a;color:#fff;font-family:Heebo,sans-serif;font-size:11px;font-weight:700;padding:4px 8px;border-radius:8px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.35)">🎓 קמפוס אונו</div>` }) }).addTo(parkMap);
+
+    setTimeout(() => parkMap.invalidateSize(), 200);
+  });
 
   let selectedLot = '', selectedStatus = '', selectedTime = '', selectedUserType = '', joinCount = 47;
   const submitBtn = document.getElementById('submit-btn');
