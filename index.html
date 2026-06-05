@@ -144,6 +144,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .footer-note { max-width: 600px; margin: 2rem auto 0; padding: 0 1rem 2rem; text-align: center; }
   .footer-note p { font-size: 11px; color: #aaa; line-height: 1.7; }
 
+  /* Photo strip */
+  .photo-strip { display: flex; gap: 8px; padding: 0 1rem; margin-bottom: 1.2rem; overflow: hidden; }
+  .photo-strip img { flex: 1; height: 110px; object-fit: cover; border-radius: 12px; min-width: 0; filter: brightness(0.88) saturate(0.9); }
+
+  /* Problem box with photo bg */
+  .problem-box { position: relative; overflow: hidden; }
+  .problem-box-bg { position: absolute; inset: 0; background-image: url('https://www.haifa.muni.il/wp-content/uploads/2022/01/shutterstock_151513067-3-216x160.jpg'); background-size: cover; background-position: center; opacity: 0.18; }
+  .problem-box-content { position: relative; z-index: 1; }
+
+  /* Campus photo in how-it-works */
+  .campus-photo { width: 100%; height: 140px; object-fit: cover; border-radius: 10px; margin-bottom: 14px; filter: brightness(0.9) saturate(0.85); }
+
   /* Hero Map Background */
   .hero-map-wrap { position: relative; overflow: hidden; margin-bottom: 0; }
   #hero-map { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; filter: saturate(0.4) brightness(0.55); }
@@ -181,10 +193,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   </div></div><!-- close hero-map container -->
 
+<!-- Photo strip -->
+<div class="photo-strip">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/93793_paris_square_haifa_PikiWiki_Israel.jpg/960px-93793_paris_square_haifa_PikiWiki_Israel.jpg" alt="כיכר פריז עיר תחתית חיפה" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/94634_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg/960px-94634_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg" alt="מרכז מסחרי עיר תחתית חיפה" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/94633_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg/960px-94633_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg" alt="עיר תחתית חיפה" />
+</div>
+
 <div class="container">
   <div class="problem-box">
-    <div class="problem-stat">12 דקות</div>
-    <div class="problem-text">בממוצע מבזבז סטודנט ביום בחיפוש חנייה סביב הקמפוס.<br>ParkAlert בא לפתור את זה.</div>
+    <div class="problem-box-bg"></div>
+    <div class="problem-box-content">
+      <div class="problem-stat">12 דקות</div>
+      <div class="problem-text">בממוצע מבזבז סטודנט ביום בחיפוש חנייה סביב הקמפוס.<br>ParkAlert בא לפתור את זה.</div>
+    </div>
   </div>
 
   <!-- Waitlist HERO - moved up -->
@@ -235,6 +257,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <div class="how-it-works">
+    <img src="https://web5.ono.ac.il/wp-content/uploads/2024/10/h3.png" alt="קמפוס אונו חיפה עיר תחתית" class="campus-photo" />
     <div class="hiw-title">איך זה עובד?</div>
     <div class="hiw-steps">
       <div class="hiw-step">
