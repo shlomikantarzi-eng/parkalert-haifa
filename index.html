@@ -144,15 +144,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .footer-note { max-width: 600px; margin: 2rem auto 0; padding: 0 1rem 2rem; text-align: center; }
   .footer-note p { font-size: 11px; color: #aaa; line-height: 1.7; }
 
-  /* Photo strip */
-  .photo-strip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 1rem; margin-bottom: 1.4rem; }
-  .photo-strip-item { position: relative; border-radius: 14px; overflow: hidden; aspect-ratio: 4/3; }
-  .photo-strip-item img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; filter: brightness(0.85) saturate(0.85); transition: transform 0.3s ease; }
-  .photo-strip-item:hover img { transform: scale(1.04); }
-  .photo-strip-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.25) 0%, transparent 60%); border-radius: 14px; }
+  /* Photo strip — single panoramic */
+  .photo-strip { position: relative; margin: 0 0 1.4rem; overflow: hidden; }
+  .photo-strip img { width: 100%; aspect-ratio: 16/5; object-fit: cover; object-position: center 55%; display: block; filter: brightness(0.82) saturate(0.85); }
+  .photo-strip-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(245,245,243,0.6) 0%, transparent 30%, transparent 60%, rgba(245,245,243,0.8) 100%); pointer-events: none; }
+  .photo-strip-label { position: absolute; bottom: 12px; left: 16px; font-size: 11px; color: #555; font-weight: 500; letter-spacing: 0.3px; }
   @media (max-width: 480px) {
-    .photo-strip { grid-template-columns: 1fr 1fr; }
-    .photo-strip-item:last-child { display: none; }
+    .photo-strip img { aspect-ratio: 16/7; }
   }
 
   /* Problem box with photo bg */
@@ -203,17 +201,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   </div></div><!-- close hero-map container -->
 
-<!-- Photo strip -->
+<!-- Photo strip — single panoramic -->
 <div class="photo-strip">
-  <div class="photo-strip-item">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/93793_paris_square_haifa_PikiWiki_Israel.jpg/960px-93793_paris_square_haifa_PikiWiki_Israel.jpg" alt="כיכר פריז עיר תחתית חיפה" />
-  </div>
-  <div class="photo-strip-item">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/94634_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg/960px-94634_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg" alt="מרכז מסחרי עיר תחתית חיפה" style="object-position: center 20%;" />
-  </div>
-  <div class="photo-strip-item">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/94633_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg/960px-94633_an_old_commercial_center_in_the_lower_city_of_haif_PikiWiki_Israel.jpg" alt="עיר תחתית חיפה" />
-  </div>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/90142_haifa_-_the_lower_city_PikiWiki_Israel.jpg" alt="עיר תחתית חיפה — רחוב עירוני" />
+  <div class="photo-strip-overlay"></div>
+  <div class="photo-strip-label">עיר תחתית חיפה · © PikiWiki Israel</div>
 </div>
 
 <div class="container">
