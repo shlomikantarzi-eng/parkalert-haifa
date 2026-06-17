@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ParkAlert — סרטון תדמית</title>
+<title>ParkAlert - סרטון תדמית</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -15,7 +15,7 @@
   .scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:0;transition:opacity .7s ease;padding:6%}
   .scene.active{opacity:1}
 
-  /* ===== Scene 1 — hero photo ===== */
+  /* ===== Scene 1 - hero photo ===== */
   #s1{padding:0}
   #s1 .photo{position:absolute;inset:0;background:url('images/lower-city.jpg') center 45%/cover;transform:scale(1.05);filter:brightness(.55) saturate(.9)}
   #s1.active .photo{animation:kenburns 6s ease-out forwards}
@@ -47,21 +47,21 @@
   @keyframes circle{to{transform:rotate(360deg)}}
   #s3 .ktxt{font-size:3.4vw}#s3 .accent{color:#FF6B4A}
 
-  /* ===== Scene 4 — stat ===== */
+  /* ===== Scene 4 - stat ===== */
   #s4{background:linear-gradient(135deg,#1D9E75,#0F6E56)}
   #s4 .num{font-size:11vw;font-weight:900;color:#fff;line-height:1;text-shadow:0 .4vw 2vw rgba(0,0,0,.3)}
   #s4 .unit{font-size:3vw;font-weight:800;color:#E1F5EE}
   #s4 .sub{font-size:2.4vw;font-weight:600;color:#fff;opacity:0;margin-top:2vw;transform:translateY(20px)}
   #s4.active .sub{animation:rise .8s 1.4s forwards}
 
-  /* ===== Scene 5 — turning point ===== */
+  /* ===== Scene 5 - turning point ===== */
   #s5{background:radial-gradient(circle at 50% 45%,#16241f,#000)}
   #s5 .ktxt{font-size:4vw}#s5 .accent{color:#1DE89C}
   #s5 .arrow{font-size:4vw;margin-top:1.5vw;opacity:0}
   #s5.active .arrow{animation:bounce 1s 1s infinite}
   @keyframes bounce{0%,100%{opacity:1;transform:translateY(0)}50%{transform:translateY(1vw)}}
 
-  /* ===== Scene 6 — app map ===== */
+  /* ===== Scene 6 - app map ===== */
   #s6{background:#0d0f0e;justify-content:center;gap:2vw}
   #s6 .title{color:#fff;font-size:2.6vw;font-weight:800;opacity:0;transform:translateY(20px)}
   #s6 .title b{color:#1DE89C}
@@ -81,7 +81,7 @@
   @keyframes pulse{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
   .campus{position:absolute;background:#1a1a1a;color:#fff;font-size:1vw;font-weight:700;padding:.4vw .8vw;border-radius:.6vw;white-space:nowrap;transform:translate(-50%,-50%);box-shadow:0 .3vw .8vw rgba(0,0,0,.3)}
 
-  /* ===== Scene 7 — found ===== */
+  /* ===== Scene 7 - found ===== */
   #s7{background:linear-gradient(135deg,#1D9E75,#0F6E56)}
   #s7 .check{font-size:8vw;opacity:0;transform:scale(.4)}
   #s7.active .check{animation:pop .7s .1s cubic-bezier(.2,.9,.3,1.4) forwards}
@@ -91,7 +91,7 @@
   #s7.active .t1{animation:rise .7s .5s forwards}
   #s7.active .t2{animation:rise .7s .8s forwards}
 
-  /* ===== Scene 8 — benefits ===== */
+  /* ===== Scene 8 - benefits ===== */
   #s8{background:radial-gradient(circle at 50% 45%,#16241f,#000);flex-direction:row;gap:3vw}
   .benf{display:flex;flex-direction:column;align-items:center;gap:1vw;opacity:0;transform:translateY(30px)}
   .benf .ic{font-size:5vw}.benf .tx{color:#fff;font-size:2vw;font-weight:800}
@@ -99,7 +99,7 @@
   #s8.active .benf:nth-child(2){animation-delay:.35s}
   #s8.active .benf:nth-child(3){animation-delay:.7s}
 
-  /* ===== Scene 9 — endcard ===== */
+  /* ===== Scene 9 - endcard ===== */
   #s9{background:linear-gradient(135deg,#0F6E56,#0a4d3c)}
   #s9 .logo{font-size:6vw;font-weight:900;color:#fff;opacity:0;transform:translateY(30px)}
   #s9 .logo span{color:#1DE89C}
@@ -186,7 +186,7 @@
   <div id="bar"></div>
 
   <div id="start">
-    <h2>🎬 סרטון תדמית — ParkAlert</h2>
+    <h2>🎬 סרטון תדמית - ParkAlert</h2>
     <p>60 שניות · לחצו להפעלה (מומלץ במסך מלא)</p>
     <button class="btn" id="playBtn">▶ הפעל סרטון</button>
   </div>
@@ -255,7 +255,7 @@
     function kick(t,amp){ const o=actx.createOscillator(),g=actx.createGain(); o.connect(g); g.connect(master); const s=now+t; o.frequency.setValueAtTime(150,s); o.frequency.exponentialRampToValueAtTime(45,s+0.11); g.gain.setValueAtTime(amp||0.5,s); g.gain.exponentialRampToValueAtTime(0.0001,s+0.17); o.start(s); o.stop(s+0.2); }
     function hat(t,amp){ const len=actx.sampleRate*0.05, b=actx.createBuffer(1,len,actx.sampleRate), d=b.getChannelData(0); for(let i=0;i<len;i++) d[i]=Math.random()*2-1; const sr=actx.createBufferSource(); sr.buffer=b; const hp=actx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=7500; const g=actx.createGain(); sr.connect(hp); hp.connect(g); g.connect(master); const s=now+t; g.gain.setValueAtTime(amp||0.18,s); g.gain.exponentialRampToValueAtTime(0.0001,s+0.04); sr.start(s); sr.stop(s+0.06); }
     function tick(t){ const o=actx.createOscillator(); o.type='square'; const g=actx.createGain(); o.connect(g); g.connect(master); const s=now+t; o.frequency.value=1800; g.gain.setValueAtTime(0.0001,s); g.gain.linearRampToValueAtTime(0.06,s+0.004); g.gain.exponentialRampToValueAtTime(0.0001,s+0.05); o.start(s); o.stop(s+0.07); }
-    // ACT 1 — tension with heartbeat pulse
+    // ACT 1 - tension with heartbeat pulse
     chord([110,164.81,220],0,7.5,'sawtooth',0.04,600);
     chord([110,164.81,220],7,7.5,'sawtooth',0.04,650);
     chord([116.54,174.61,233.08],14,6,'sawtooth',0.045,820);
@@ -263,7 +263,7 @@
     for(let t=2;t<14;t+=1) kick(t,0.30);
     for(let t=14;t<24.5;t+=0.5) kick(t,0.36);
     for(let t=16;t<24.5;t+=0.5) hat(t,0.12);
-    // ACT 2 — driving beat + bass + sparkle
+    // ACT 2 - driving beat + bass + sparkle
     chord([130.81,196,261.63],24.5,6.5,'triangle',0.05,2300);
     chord([174.61,261.63,349.23],31,6.5,'triangle',0.05,2300);
     chord([196,293.66,392],37.5,4.5,'triangle',0.05,2500);
@@ -273,7 +273,7 @@
     [[65.41,24.5,6.5],[87.31,31,6.5],[98,37.5,4.5],[65.41,42,4]].forEach(([f,t,d])=>{ for(let k=0;k<d/0.5;k++) bass(f,t+k*0.5,0.45); });
     const arp=[523.25,659.25,783.99,1046.5];
     for(let i=0;i<14;i++) note(arp[i%4],25+i*0.4,0.45,'sine',0.045,4500);
-    // ENDCARD — uplifting resolve
+    // ENDCARD - uplifting resolve
     chord([261.63,329.63,392,523.25],46,8,'triangle',0.055,3200);
     [65.41,65.41,98,98].forEach((f,i)=>bass(f,46+i*1.5,1.4));
     for(let i=0;i<10;i++) note(arp[i%4],46.3+i*0.5,0.55,'sine',0.05,4500);
