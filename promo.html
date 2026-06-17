@@ -140,8 +140,8 @@
   </div>
 
   <div class="scene" id="s4">
-    <div><span class="num" id="counter">0</span><span class="unit"> דקות</span></div>
-    <div class="sub">מתבזבזות בממוצע כל יום בחיפוש חנייה</div>
+    <div class="num" style="font-size:6vw;line-height:1.15">כמה זמן אתם מבזבזים<br>על חיפוש חנייה?</div>
+    <div class="sub">כל יום, מסביב לקמפוס</div>
   </div>
 
   <div class="scene" id="s5">
@@ -210,15 +210,8 @@
     scenes.forEach(([id,s,e])=>{
       document.getElementById(id).classList.toggle('active', sec>=s && sec<e);
     });
-    // counter animation in scene 4
-    if(!counted && sec>=14){ counted = true; countUp(); }
     if(sec < TOTAL) raf = requestAnimationFrame(frame);
     else document.getElementById('s9').classList.add('active'); // hold endcard
-  }
-
-  function countUp(){
-    const el = document.getElementById('counter'); let v=0;
-    const iv = setInterval(()=>{ v++; el.textContent=v; if(v>=12) clearInterval(iv); }, 110);
   }
 
   function startSequence(){
@@ -292,7 +285,7 @@
   function playVoiceover(){
     try{ speechSynthesis.getVoices(); }catch(e){}
     setTimeout(()=>speakHe('בכל בוקר, סטודנטים בקמפוס אונו מבזבזים זמן יקר בחיפוש חנייה בעיר התחתית.'), 800);
-    setTimeout(()=>speakHe('בממוצע, שתים עשרה דקות ביום, מסביב לאותם רחובות, שוב ושוב.'), 9500);
+    setTimeout(()=>speakHe('שוב ושוב, מסתובבים מסביב לאותם רחובות, בלי למצוא מקום.'), 9500);
     setTimeout(()=>speakHe('פארק-אלרט מציגה בזמן אמת איפה יש חנייה פנויה סביב הקמפוס, על בסיס דיווחי משתמשים.'), 19800);
     setTimeout(()=>speakHe('רואים מקום, נוסעים ישר, וחוסכים את כל ההקפות. פחות לחץ, יותר זמן ללימודים.'), 33500);
     setTimeout(()=>speakHe('פארק-אלרט. חנייה פנויה, עכשיו. הצטרפו, וחסכו זמן.'), 46500);
