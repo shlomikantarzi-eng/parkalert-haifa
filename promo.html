@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ParkAlert — סרטון תדמית</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#000;overflow:hidden;font-family:'Heebo',sans-serif}
+  #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  /* 16:9 stage, scales to fit */
+  #stage{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;background:#0d0f0e;overflow:hidden;direction:rtl}
+
+  .scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:0;transition:opacity .7s ease;padding:6%}
+  .scene.active{opacity:1}
+
+  /* ===== Scene 1 — hero photo ===== */
+  #s1{padding:0}
+  #s1 .photo{position:absolute;inset:0;background:url('images/lower-city.jpg') center 45%/cover;transform:scale(1.05);filter:brightness(.55) saturate(.9)}
+  #s1.active .photo{animation:kenburns 6s ease-out forwards}
+  @keyframes kenburns{from{transform:scale(1.05)}to{transform:scale(1.18)}}
+  #s1 .grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7),rgba(0,0,0,.15) 50%,rgba(0,0,0,.5))}
+  #s1 .loc{position:relative;color:#fff;z-index:2;align-self:flex-start;margin:auto auto 8% 8%}
+  #s1 .loc .tag{font-size:1.6vw;letter-spacing:.3vw;color:#1DE89C;font-weight:700;opacity:0;transform:translateY(20px)}
+  #s1 .loc .big{font-size:3.4vw;font-weight:900;color:#fff;opacity:0;transform:translateY(20px)}
+  #s1.active .loc .tag{animation:rise .8s .4s forwards}
+  #s1.active .loc .big{animation:rise .8s .8s forwards}
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+
+  /* ===== generic kinetic text ===== */
+  .ktxt{color:#fff;font-weight:800;line-height:1.25}
+  .ktxt .l{display:block;opacity:0;transform:translateY(28px)}
+  .scene.active .ktxt .l{animation:rise .7s forwards}
+  .scene.active .ktxt .l:nth-child(2){animation-delay:.5s}
+  .scene.active .ktxt .l:nth-child(3){animation-delay:1s}
+
+  /* frustration scenes bg */
+  #s2,#s3{background:radial-gradient(circle at 50% 40%,#1a1d1b,#000)}
+  #s2 .ktxt{font-size:3.2vw}#s2 .accent{color:#FF6B4A}
+  /* circling car */
+  .road{position:relative;width:22vw;height:22vw;margin-bottom:3vw}
+  .road .ring{position:absolute;inset:0;border:.25vw dashed #3a3f3c;border-radius:50%}
+  .road .ring2{position:absolute;inset:18%;border:.2vw dashed #2c302e;border-radius:50%}
+  .road .car{position:absolute;top:-1.4vw;left:50%;width:2.8vw;height:2.8vw;margin-left:-1.4vw;font-size:2.6vw;transform-origin:50% 12.4vw}
+  #s3.active .road .car{animation:circle 2.2s linear infinite}
+  @keyframes circle{to{transform:rotate(360deg)}}
+  #s3 .ktxt{font-size:3.4vw}#s3 .accent{color:#FF6B4A}
+
+  /* ===== Scene 4 — stat ===== */
+  #s4{background:linear-gradient(135deg,#1D9E75,#0F6E56)}
+  #s4 .num{font-size:11vw;font-weight:900;color:#fff;line-height:1;text-shadow:0 .4vw 2vw rgba(0,0,0,.3)}
+  #s4 .unit{font-size:3vw;font-weight:800;color:#E1F5EE}
+  #s4 .sub{font-size:2.4vw;font-weight:600;color:#fff;opacity:0;margin-top:2vw;transform:translateY(20px)}
+  #s4.active .sub{animation:rise .8s 1.4s forwards}
+
+  /* ===== Scene 5 — turning point ===== */
+  #s5{background:radial-gradient(circle at 50% 45%,#16241f,#000)}
+  #s5 .ktxt{font-size:4vw}#s5 .accent{color:#1DE89C}
+  #s5 .arrow{font-size:4vw;margin-top:1.5vw;opacity:0}
+  #s5.active .arrow{animation:bounce 1s 1s infinite}
+  @keyframes bounce{0%,100%{opacity:1;transform:translateY(0)}50%{transform:translateY(1vw)}}
+
+  /* ===== Scene 6 — app map ===== */
+  #s6{background:#0d0f0e;justify-content:center;gap:2vw}
+  #s6 .title{color:#fff;font-size:2.6vw;font-weight:800;opacity:0;transform:translateY(20px)}
+  #s6 .title b{color:#1DE89C}
+  #s6.active .title{animation:rise .7s .2s forwards}
+  .phone{width:26vw;height:30vw;background:#fff;border-radius:2.4vw;border:.7vw solid #1a1a1a;box-shadow:0 2vw 6vw rgba(29,158,117,.35);position:relative;overflow:hidden;opacity:0;transform:translateY(40px) scale(.96)}
+  #s6.active .phone{animation:phoneIn .9s .4s cubic-bezier(.2,.8,.2,1) forwards}
+  @keyframes phoneIn{to{opacity:1;transform:translateY(0) scale(1)}}
+  .map{position:absolute;inset:0;background:#e8eae6;overflow:hidden}
+  /* faux streets */
+  .map .st{position:absolute;background:#d2d6cf}
+  .map .h1{top:30%;left:0;right:0;height:1.1vw}.map .h2{top:62%;left:0;right:0;height:1.6vw;background:#c7ccc3}
+  .map .v1{left:34%;top:0;bottom:0;width:1.1vw}.map .v2{left:68%;top:0;bottom:0;width:1.6vw;background:#c7ccc3}
+  .map .water{position:absolute;left:0;right:0;bottom:0;height:20%;background:#bfe0e8}
+  .pin{position:absolute;width:2.2vw;height:2.2vw;border-radius:50%;border:.35vw solid #fff;box-shadow:0 .3vw .8vw rgba(0,0,0,.3);transform:translate(-50%,-50%)}
+  .pin.green{background:#1D9E75}.pin.yellow{background:#EF9F27}.pin.red{background:#D85A30}.pin.blue{background:#185FA5}
+  .pin.pulse::after{content:'';position:absolute;inset:-.35vw;border-radius:50%;border:.3vw solid #1D9E75;animation:pulse 1.4s ease-out infinite}
+  @keyframes pulse{0%{transform:scale(1);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+  .campus{position:absolute;background:#1a1a1a;color:#fff;font-size:1vw;font-weight:700;padding:.4vw .8vw;border-radius:.6vw;white-space:nowrap;transform:translate(-50%,-50%);box-shadow:0 .3vw .8vw rgba(0,0,0,.3)}
+
+  /* ===== Scene 7 — found ===== */
+  #s7{background:linear-gradient(135deg,#1D9E75,#0F6E56)}
+  #s7 .check{font-size:8vw;opacity:0;transform:scale(.4)}
+  #s7.active .check{animation:pop .7s .1s cubic-bezier(.2,.9,.3,1.4) forwards}
+  @keyframes pop{to{opacity:1;transform:scale(1)}}
+  #s7 .t1{font-size:3.6vw;font-weight:900;color:#fff;opacity:0;margin-top:1vw}
+  #s7 .t2{font-size:2.2vw;font-weight:600;color:#E1F5EE;opacity:0;margin-top:.8vw}
+  #s7.active .t1{animation:rise .7s .5s forwards}
+  #s7.active .t2{animation:rise .7s .8s forwards}
+
+  /* ===== Scene 8 — benefits ===== */
+  #s8{background:radial-gradient(circle at 50% 45%,#16241f,#000);flex-direction:row;gap:3vw}
+  .benf{display:flex;flex-direction:column;align-items:center;gap:1vw;opacity:0;transform:translateY(30px)}
+  .benf .ic{font-size:5vw}.benf .tx{color:#fff;font-size:2vw;font-weight:800}
+  #s8.active .benf{animation:rise .7s forwards}
+  #s8.active .benf:nth-child(2){animation-delay:.35s}
+  #s8.active .benf:nth-child(3){animation-delay:.7s}
+
+  /* ===== Scene 9 — endcard ===== */
+  #s9{background:linear-gradient(135deg,#0F6E56,#0a4d3c)}
+  #s9 .logo{font-size:6vw;font-weight:900;color:#fff;opacity:0;transform:translateY(30px)}
+  #s9 .logo span{color:#1DE89C}
+  #s9 .slogan{font-size:2.6vw;font-weight:700;color:#E1F5EE;opacity:0;margin-top:.5vw}
+  #s9 .cta{margin-top:3vw;background:#1DE89C;color:#0a4d3c;font-size:2.2vw;font-weight:900;padding:1.4vw 3.5vw;border-radius:5vw;opacity:0;transform:translateY(20px)}
+  #s9 .url{font-size:1.7vw;color:#fff;margin-top:2vw;opacity:0;font-weight:500}
+  #s9 .foot{position:absolute;bottom:5%;font-size:1.5vw;color:#bfe9d8;opacity:0;font-weight:600}
+  #s9.active .logo{animation:rise .8s .2s forwards}
+  #s9.active .slogan{animation:rise .8s .6s forwards}
+  #s9.active .cta{animation:rise .8s 1s forwards}
+  #s9.active .url{animation:rise .8s 1.4s forwards}
+  #s9.active .foot{animation:rise .8s 1.8s forwards}
+
+  /* progress + start */
+  #bar{position:absolute;bottom:0;right:0;height:.5vw;background:#1DE89C;width:0;z-index:30}
+  #start{position:absolute;inset:0;z-index:40;background:rgba(0,0,0,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2vw;cursor:pointer}
+  #start h2{color:#fff;font-size:2.4vw;font-weight:800}#start p{color:#9fb;font-size:1.4vw}
+  #start .btn{background:#1DE89C;color:#062;font-size:2vw;font-weight:900;padding:1.4vw 4vw;border-radius:5vw;border:none;cursor:pointer}
+  #start.hide{display:none}
+  @media(max-width:700px){#start h2{font-size:5vw}#start .btn{font-size:4.5vw;padding:3vw 8vw}#start p{font-size:3vw}}
+</style>
+</head>
+<body>
+<div id="wrap"><div id="stage">
+
+  <div class="scene" id="s1">
+    <div class="photo"></div><div class="grad"></div>
+    <div class="loc"><div class="tag">העיר התחתית, חיפה · 08:15 בבוקר</div><div class="big">עוד יום. עוד חיפוש חנייה.</div></div>
+  </div>
+
+  <div class="scene" id="s2">
+    <div class="ktxt"><span class="l">מסתובבים סביב קמפוס אונו,</span><span class="l">השעון רץ,</span><span class="l">והחנייה <span class="accent">תמיד תפוסה.</span></span></div>
+  </div>
+
+  <div class="scene" id="s3">
+    <div class="road"><div class="ring"></div><div class="ring2"></div><div class="car">🚗</div></div>
+    <div class="ktxt"><span class="l">סיבוב אחר סיבוב…</span><span class="l"><span class="accent">בזבוז זמן יקר.</span></span></div>
+  </div>
+
+  <div class="scene" id="s4">
+    <div><span class="num" id="counter">0</span><span class="unit"> דקות</span></div>
+    <div class="sub">מתבזבזות בממוצע כל יום בחיפוש חנייה</div>
+  </div>
+
+  <div class="scene" id="s5">
+    <div class="ktxt"><span class="l">אבל יש <span class="accent">דרך טובה יותר</span></span></div>
+    <div class="arrow">👇</div>
+  </div>
+
+  <div class="scene" id="s6">
+    <div class="title">ParkAlert מראה לך <b>בזמן אמת</b> איפה יש חנייה פנויה</div>
+    <div class="phone"><div class="map">
+      <div class="st h1"></div><div class="st h2"></div><div class="st v1"></div><div class="st v2"></div>
+      <div class="water"></div>
+      <div class="campus" style="top:40%;left:50%">🎓 קמפוס אונו</div>
+      <div class="pin green pulse" style="top:26%;left:32%"></div>
+      <div class="pin yellow" style="top:55%;left:70%"></div>
+      <div class="pin red" style="top:72%;left:40%"></div>
+      <div class="pin blue" style="top:30%;left:78%"></div>
+      <div class="pin green" style="top:60%;left:22%"></div>
+    </div></div>
+  </div>
+
+  <div class="scene" id="s7">
+    <div class="check">✅</div>
+    <div class="t1">מצאת חנייה פנויה!</div>
+    <div class="t2">רחוב הנמל · 2 דקות מהקמפוס</div>
+  </div>
+
+  <div class="scene" id="s8">
+    <div class="benf"><div class="ic">🔄</div><div class="tx">פחות הקפות</div></div>
+    <div class="benf"><div class="ic">😌</div><div class="tx">פחות לחץ</div></div>
+    <div class="benf"><div class="ic">⏱️</div><div class="tx">יותר זמן ללימודים</div></div>
+  </div>
+
+  <div class="scene" id="s9">
+    <div class="logo">Park<span>Alert</span></div>
+    <div class="slogan">חנייה פנויה. עכשיו.</div>
+    <div class="cta">הצטרפו לרשימת ההמתנה</div>
+    <div class="url">parkalert-haifa · בזמן אמת על בסיס דיווחי משתמשים</div>
+    <div class="foot">הקריה האקדמית אונו · קמפוס חיפה</div>
+  </div>
+
+  <div id="bar"></div>
+
+  <div id="start">
+    <h2>🎬 סרטון תדמית — ParkAlert</h2>
+    <p>60 שניות · לחצו להפעלה (מומלץ במסך מלא)</p>
+    <button class="btn" id="playBtn">▶ הפעל סרטון</button>
+  </div>
+
+</div></div>
+
+<script>
+  // scene timeline [id, startSec, endSec]
+  const scenes = [
+    ['s1',0,5],['s2',5,11],['s3',11,16],['s4',16,22],['s5',22,28],
+    ['s6',28,38],['s7',38,44],['s8',44,52],['s9',52,60]
+  ];
+  const TOTAL = 60;
+  const bar = document.getElementById('bar');
+  let t0 = null, raf = null, counted = false;
+
+  function frame(ts){
+    if(t0===null) t0 = ts;
+    const sec = (ts - t0)/1000;
+    bar.style.width = Math.min(100, sec/TOTAL*100) + '%';
+    scenes.forEach(([id,s,e])=>{
+      document.getElementById(id).classList.toggle('active', sec>=s && sec<e);
+    });
+    // counter animation in scene 4
+    if(!counted && sec>=16){ counted = true; countUp(); }
+    if(sec < TOTAL) raf = requestAnimationFrame(frame);
+    else document.getElementById('s9').classList.add('active'); // hold endcard
+  }
+
+  function countUp(){
+    const el = document.getElementById('counter'); let v=0;
+    const iv = setInterval(()=>{ v++; el.textContent=v; if(v>=12) clearInterval(iv); }, 110);
+  }
+
+  document.getElementById('playBtn').addEventListener('click', async ()=>{
+    document.getElementById('start').classList.add('hide');
+    try{ await document.getElementById('wrap').requestFullscreen(); }catch(e){}
+    t0=null; counted=false; raf=requestAnimationFrame(frame);
+  });
+</script>
+</body>
+</html>
