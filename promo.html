@@ -187,7 +187,7 @@
 
   <div id="start">
     <h2>🎬 סרטון תדמית - ParkAlert</h2>
-    <p>60 שניות · לחצו להפעלה (מומלץ במסך מלא)</p>
+    <p>60 שניות · לחצו להפעלה</p>
     <button class="btn" id="playBtn">▶ הפעל סרטון</button>
   </div>
 
@@ -272,31 +272,11 @@
     for(let i=0;i<10;i++) note(arp[i%4],46.3+i*0.5,0.55,'sine',0.05,4500);
   }
 
-  // ===== Light Hebrew voiceover (Web Speech API) =====
-  function speakHe(text){
-    try{
-      const u=new SpeechSynthesisUtterance(text);
-      u.lang='he-IL'; u.rate=1.0; u.pitch=1.0; u.volume=1.0;
-      const v=(speechSynthesis.getVoices()||[]).find(x=>/he|iw/i.test(x.lang));
-      if(v) u.voice=v;
-      speechSynthesis.speak(u);
-    }catch(e){}
-  }
-  function playVoiceover(){
-    try{ speechSynthesis.getVoices(); }catch(e){}
-    setTimeout(()=>speakHe('בכל בוקר, סטודנטים בקמפוס אונו מבזבזים זמן יקר בחיפוש חנייה בעיר התחתית.'), 800);
-    setTimeout(()=>speakHe('שוב ושוב, מסתובבים מסביב לאותם רחובות, בלי למצוא מקום.'), 9500);
-    setTimeout(()=>speakHe('פארק-אלרט מציגה בזמן אמת איפה יש חנייה פנויה סביב הקמפוס, על בסיס דיווחי משתמשים.'), 19800);
-    setTimeout(()=>speakHe('רואים מקום, נוסעים ישר, וחוסכים את כל ההקפות. פחות לחץ, יותר זמן ללימודים.'), 33500);
-    setTimeout(()=>speakHe('פארק-אלרט. חנייה פנויה, עכשיו. הצטרפו, וחסכו זמן.'), 46500);
-  }
-
   document.getElementById('playBtn').addEventListener('click', async ()=>{
     const params = new URLSearchParams(location.search);
     const embed = params.get('embed')==='1';   // embedded in site: no music, no fullscreen
     if(!embed){ try{ await document.getElementById('wrap').requestFullscreen(); }catch(e){} }
     if(!embed) playSoundtrack();
-    if(params.get('vo')==='1') playVoiceover();
     startSequence();
   });
   if(new URLSearchParams(location.search).get('auto')==='1'){ startSequence(); }
