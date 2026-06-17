@@ -291,15 +291,17 @@
   }
   function playVoiceover(){
     try{ speechSynthesis.getVoices(); }catch(e){}
-    setTimeout(()=>speakHe('כל בוקר, אותו סיפור.'), 1600);
-    setTimeout(()=>speakHe('פארק-אלרט. חנייה פנויה, עכשיו.'), 25200);
-    setTimeout(()=>speakHe('הצטרפו, ותהיו הראשונים לדעת.'), 46500);
+    setTimeout(()=>speakHe('בכל בוקר, סטודנטים בקמפוס אונו מבזבזים זמן יקר בחיפוש חנייה בעיר התחתית.'), 800);
+    setTimeout(()=>speakHe('בממוצע, שתים עשרה דקות ביום, מסביב לאותם רחובות, שוב ושוב.'), 9500);
+    setTimeout(()=>speakHe('פארק-אלרט מציגה בזמן אמת איפה יש חנייה פנויה סביב הקמפוס, על בסיס דיווחי משתמשים.'), 19800);
+    setTimeout(()=>speakHe('רואים מקום, נוסעים ישר, וחוסכים את כל ההקפות. פחות לחץ, יותר זמן ללימודים.'), 33500);
+    setTimeout(()=>speakHe('פארק-אלרט. חנייה פנויה, עכשיו. הצטרפו, וחסכו זמן.'), 46500);
   }
 
   document.getElementById('playBtn').addEventListener('click', async ()=>{
     try{ await document.getElementById('wrap').requestFullscreen(); }catch(e){}
     playSoundtrack();
-    if(new URLSearchParams(location.search).get('novo')!=='1') playVoiceover();
+    if(new URLSearchParams(location.search).get('vo')==='1') playVoiceover();  // opt-in only (default = music only)
     startSequence();
   });
   if(new URLSearchParams(location.search).get('auto')==='1'){ startSequence(); }
