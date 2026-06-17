@@ -225,8 +225,55 @@
     document.getElementById('start').classList.add('hide');
     t0=null; counted=false; raf=requestAnimationFrame(frame);
   }
+  // ===== Original synthesized soundtrack (Web Audio, copyright-free) =====
+  function playSoundtrack(){
+    let actx;
+    try{ actx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
+    if(actx.state==='suspended') actx.resume();
+    const now = actx.currentTime + 0.05;
+    const master = actx.createGain(); master.connect(actx.destination);
+    master.gain.setValueAtTime(0.0001, now);
+    master.gain.exponentialRampToValueAtTime(0.16, now+2);
+    master.gain.exponentialRampToValueAtTime(0.15, now+19);
+    master.gain.exponentialRampToValueAtTime(0.30, now+25);
+    master.gain.exponentialRampToValueAtTime(0.34, now+46);
+    master.gain.exponentialRampToValueAtTime(0.22, now+52);
+    master.gain.exponentialRampToValueAtTime(0.0001, now+54.5);
+    function note(freq,t,dur,type,gain,ff){
+      const o=actx.createOscillator(); o.type=type||'sine'; o.frequency.value=freq;
+      const g=actx.createGain();
+      if(ff){ const f=actx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=ff; o.connect(g); g.connect(f); f.connect(master); }
+      else { o.connect(g); g.connect(master); }
+      const s=now+t;
+      g.gain.setValueAtTime(0.0001,s);
+      g.gain.linearRampToValueAtTime(gain||0.2, s+0.05);
+      g.gain.exponentialRampToValueAtTime(0.0001, s+dur);
+      o.start(s); o.stop(s+dur+0.1);
+    }
+    const chord=(fs,t,dur,type,gain,ff)=>fs.forEach(f=>note(f,t,dur,type,gain,ff));
+    function kick(t){ const o=actx.createOscillator(),g=actx.createGain(); o.connect(g); g.connect(master); const s=now+t; o.frequency.setValueAtTime(140,s); o.frequency.exponentialRampToValueAtTime(45,s+0.12); g.gain.setValueAtTime(0.5,s); g.gain.exponentialRampToValueAtTime(0.0001,s+0.18); o.start(s); o.stop(s+0.22); }
+    function tick(t){ const o=actx.createOscillator(); o.type='square'; const g=actx.createGain(); o.connect(g); g.connect(master); const s=now+t; o.frequency.value=1800; g.gain.setValueAtTime(0.0001,s); g.gain.linearRampToValueAtTime(0.06,s+0.004); g.gain.exponentialRampToValueAtTime(0.0001,s+0.05); o.start(s); o.stop(s+0.07); }
+    // ACT 1 — tension (dark pad + clock ticks)
+    chord([110,164.81,220],0,7.5,'sawtooth',0.045,600);
+    chord([110,164.81,220],7,7.5,'sawtooth',0.045,650);
+    chord([116.54,174.61,233.08],14,6,'sawtooth',0.05,750);
+    for(let t=1;t<14;t++) tick(t);
+    // ACT 2 — solution (bright pads + beat + sparkle)
+    chord([130.81,196,261.63],24.5,6.5,'triangle',0.06,2200);
+    chord([174.61,261.63,349.23],30.5,6.5,'triangle',0.06,2200);
+    chord([196,293.66,392],36.5,5.5,'triangle',0.06,2400);
+    chord([130.81,196,261.63,392],41.5,5,'triangle',0.07,2600);
+    for(let t=24.5;t<52.5;t+=0.5) kick(t);
+    const arp=[523.25,659.25,783.99,1046.5];
+    for(let i=0;i<10;i++) note(arp[i%4],25+i*0.45,0.5,'sine',0.05,4000);
+    // ENDCARD — uplifting resolve
+    chord([261.63,329.63,392,523.25],46,8,'triangle',0.06,3000);
+    for(let i=0;i<8;i++) note(arp[i%4],46.3+i*0.6,0.6,'sine',0.06,4000);
+  }
+
   document.getElementById('playBtn').addEventListener('click', async ()=>{
     try{ await document.getElementById('wrap').requestFullscreen(); }catch(e){}
+    playSoundtrack();
     startSequence();
   });
   if(new URLSearchParams(location.search).get('auto')==='1'){ startSequence(); }
