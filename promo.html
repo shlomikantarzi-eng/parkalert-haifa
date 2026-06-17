@@ -251,29 +251,55 @@
       o.start(s); o.stop(s+dur+0.1);
     }
     const chord=(fs,t,dur,type,gain,ff)=>fs.forEach(f=>note(f,t,dur,type,gain,ff));
-    function kick(t){ const o=actx.createOscillator(),g=actx.createGain(); o.connect(g); g.connect(master); const s=now+t; o.frequency.setValueAtTime(140,s); o.frequency.exponentialRampToValueAtTime(45,s+0.12); g.gain.setValueAtTime(0.5,s); g.gain.exponentialRampToValueAtTime(0.0001,s+0.18); o.start(s); o.stop(s+0.22); }
+    const bass=(freq,t,dur)=>note(freq,t,dur,'sawtooth',0.13,520);
+    function kick(t,amp){ const o=actx.createOscillator(),g=actx.createGain(); o.connect(g); g.connect(master); const s=now+t; o.frequency.setValueAtTime(150,s); o.frequency.exponentialRampToValueAtTime(45,s+0.11); g.gain.setValueAtTime(amp||0.5,s); g.gain.exponentialRampToValueAtTime(0.0001,s+0.17); o.start(s); o.stop(s+0.2); }
+    function hat(t,amp){ const len=actx.sampleRate*0.05, b=actx.createBuffer(1,len,actx.sampleRate), d=b.getChannelData(0); for(let i=0;i<len;i++) d[i]=Math.random()*2-1; const sr=actx.createBufferSource(); sr.buffer=b; const hp=actx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=7500; const g=actx.createGain(); sr.connect(hp); hp.connect(g); g.connect(master); const s=now+t; g.gain.setValueAtTime(amp||0.18,s); g.gain.exponentialRampToValueAtTime(0.0001,s+0.04); sr.start(s); sr.stop(s+0.06); }
     function tick(t){ const o=actx.createOscillator(); o.type='square'; const g=actx.createGain(); o.connect(g); g.connect(master); const s=now+t; o.frequency.value=1800; g.gain.setValueAtTime(0.0001,s); g.gain.linearRampToValueAtTime(0.06,s+0.004); g.gain.exponentialRampToValueAtTime(0.0001,s+0.05); o.start(s); o.stop(s+0.07); }
-    // ACT 1 — tension (dark pad + clock ticks)
-    chord([110,164.81,220],0,7.5,'sawtooth',0.045,600);
-    chord([110,164.81,220],7,7.5,'sawtooth',0.045,650);
-    chord([116.54,174.61,233.08],14,6,'sawtooth',0.05,750);
-    for(let t=1;t<14;t++) tick(t);
-    // ACT 2 — solution (bright pads + beat + sparkle)
-    chord([130.81,196,261.63],24.5,6.5,'triangle',0.06,2200);
-    chord([174.61,261.63,349.23],30.5,6.5,'triangle',0.06,2200);
-    chord([196,293.66,392],36.5,5.5,'triangle',0.06,2400);
-    chord([130.81,196,261.63,392],41.5,5,'triangle',0.07,2600);
-    for(let t=24.5;t<52.5;t+=0.5) kick(t);
+    // ACT 1 — tension with heartbeat pulse
+    chord([110,164.81,220],0,7.5,'sawtooth',0.04,600);
+    chord([110,164.81,220],7,7.5,'sawtooth',0.04,650);
+    chord([116.54,174.61,233.08],14,6,'sawtooth',0.045,820);
+    for(let t=1;t<14;t++) tick(t+0.5);
+    for(let t=2;t<14;t+=1) kick(t,0.30);
+    for(let t=14;t<24.5;t+=0.5) kick(t,0.36);
+    for(let t=16;t<24.5;t+=0.5) hat(t,0.12);
+    // ACT 2 — driving beat + bass + sparkle
+    chord([130.81,196,261.63],24.5,6.5,'triangle',0.05,2300);
+    chord([174.61,261.63,349.23],31,6.5,'triangle',0.05,2300);
+    chord([196,293.66,392],37.5,4.5,'triangle',0.05,2500);
+    chord([130.81,196,261.63,392],42,4,'triangle',0.06,2700);
+    for(let t=24.5;t<53;t+=0.5) kick(t,0.58);
+    for(let t=24.75;t<53;t+=0.5) hat(t,0.2);
+    [[65.41,24.5,6.5],[87.31,31,6.5],[98,37.5,4.5],[65.41,42,4]].forEach(([f,t,d])=>{ for(let k=0;k<d/0.5;k++) bass(f,t+k*0.5,0.45); });
     const arp=[523.25,659.25,783.99,1046.5];
-    for(let i=0;i<10;i++) note(arp[i%4],25+i*0.45,0.5,'sine',0.05,4000);
+    for(let i=0;i<14;i++) note(arp[i%4],25+i*0.4,0.45,'sine',0.045,4500);
     // ENDCARD — uplifting resolve
-    chord([261.63,329.63,392,523.25],46,8,'triangle',0.06,3000);
-    for(let i=0;i<8;i++) note(arp[i%4],46.3+i*0.6,0.6,'sine',0.06,4000);
+    chord([261.63,329.63,392,523.25],46,8,'triangle',0.055,3200);
+    [65.41,65.41,98,98].forEach((f,i)=>bass(f,46+i*1.5,1.4));
+    for(let i=0;i<10;i++) note(arp[i%4],46.3+i*0.5,0.55,'sine',0.05,4500);
+  }
+
+  // ===== Light Hebrew voiceover (Web Speech API) =====
+  function speakHe(text){
+    try{
+      const u=new SpeechSynthesisUtterance(text);
+      u.lang='he-IL'; u.rate=1.0; u.pitch=1.0; u.volume=1.0;
+      const v=(speechSynthesis.getVoices()||[]).find(x=>/he|iw/i.test(x.lang));
+      if(v) u.voice=v;
+      speechSynthesis.speak(u);
+    }catch(e){}
+  }
+  function playVoiceover(){
+    try{ speechSynthesis.getVoices(); }catch(e){}
+    setTimeout(()=>speakHe('כל בוקר, אותו סיפור.'), 1600);
+    setTimeout(()=>speakHe('פארק-אלרט. חנייה פנויה, עכשיו.'), 25200);
+    setTimeout(()=>speakHe('הצטרפו, ותהיו הראשונים לדעת.'), 46500);
   }
 
   document.getElementById('playBtn').addEventListener('click', async ()=>{
     try{ await document.getElementById('wrap').requestFullscreen(); }catch(e){}
     playSoundtrack();
+    if(new URLSearchParams(location.search).get('novo')!=='1') playVoiceover();
     startSequence();
   });
   if(new URLSearchParams(location.search).get('auto')==='1'){ startSequence(); }
