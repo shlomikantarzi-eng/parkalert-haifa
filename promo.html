@@ -299,9 +299,11 @@
   }
 
   document.getElementById('playBtn').addEventListener('click', async ()=>{
-    try{ await document.getElementById('wrap').requestFullscreen(); }catch(e){}
-    playSoundtrack();
-    if(new URLSearchParams(location.search).get('vo')==='1') playVoiceover();  // opt-in only (default = music only)
+    const params = new URLSearchParams(location.search);
+    const embed = params.get('embed')==='1';   // embedded in site: no music, no fullscreen
+    if(!embed){ try{ await document.getElementById('wrap').requestFullscreen(); }catch(e){} }
+    if(!embed) playSoundtrack();
+    if(params.get('vo')==='1') playVoiceover();
     startSequence();
   });
   if(new URLSearchParams(location.search).get('auto')==='1'){ startSequence(); }
