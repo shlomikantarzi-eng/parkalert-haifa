@@ -99,6 +99,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .promo-video-title { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; text-align: center; }
   .promo-video-wrap { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 14px; overflow: hidden; border: 1px solid #e0e0dc; background: #000; }
   .promo-video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+  .promo-video-wrap:fullscreen { width: 100vw; height: 100vh; aspect-ratio: auto; border-radius: 0; border: none; }
+  .promo-fs-btn { position: absolute; top: 8px; left: 8px; z-index: 5; width: 34px; height: 34px; border: none; border-radius: 8px; background: rgba(0,0,0,0.55); color: #fff; font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; line-height: 1; }
+  .promo-fs-btn:hover { background: rgba(0,0,0,0.82); }
 
   .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
   .stat { background: #fff; border: 1px solid #e0e0dc; border-radius: 12px; padding: 16px 10px; text-align: center; }
@@ -219,8 +222,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="container">
   <div class="promo-video-section">
     <div class="promo-video-title">🎬 ככה זה עובד (דקה)</div>
-    <div class="promo-video-wrap">
-      <iframe src="promo.html?embed=1" title="סרטון תדמית ParkAlert" loading="lazy"></iframe>
+    <div class="promo-video-wrap" id="promo-video-wrap">
+      <iframe id="promo-iframe" src="promo.html?embed=1" title="סרטון תדמית ParkAlert" loading="lazy" allow="fullscreen"></iframe>
+      <button class="promo-fs-btn" id="promo-fs-btn" onclick="togglePromoFs()" title="מסך מלא" aria-label="מסך מלא">⛶</button>
     </div>
   </div>
 
@@ -413,6 +417,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
   // ── dataLayer helper (all events go through here → GTM → GA4) ──
   function dl(obj){ window.dataLayer = window.dataLayer || []; window.dataLayer.push(obj); }
+
+  // Fullscreen toggle for the embedded promo video
+  function togglePromoFs(){
+    const wrap = document.getElementById('promo-video-wrap');
+    if (!document.fullscreenElement) { wrap.requestFullscreen().catch(function(){}); }
+    else { document.exitFullscreen(); }
+  }
+  document.addEventListener('fullscreenchange', function(){
+    const btn = document.getElementById('promo-fs-btn');
+    if (btn) btn.textContent = document.fullscreenElement ? '✕' : '⛶';
+  });
 
   // ── Parking lots map (Leaflet) - init after load so it never blocks the page ──
   window.addEventListener('load', function() {
