@@ -213,6 +213,17 @@
     scenes.forEach(([id,s,e])=>{
       document.getElementById(id).classList.toggle('active', sec>=s && sec<e);
     });
+    
+    // Dynamic volume adjustment: quieter intro, louder solution
+    const music = document.getElementById('music-audio');
+    if(music && sec < TOTAL) {
+      if(sec < 11.2) {
+        music.volume = 0.04; // Quiet intro
+      } else {
+        music.volume = 0.16; // Louder, emotional part
+      }
+    }
+    
     if(sec < TOTAL) raf = requestAnimationFrame(frame);
     else {
       document.getElementById('s9').classList.add('active'); // hold endcard
@@ -306,7 +317,7 @@
     // Play background music MP3
     const music = document.getElementById('music-audio');
     if(music) {
-      music.volume = 0.08;
+      music.volume = 0.04;
       music.currentTime = 0;
       music.play().catch(e => console.log("Music play error:", e));
     }
