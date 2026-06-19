@@ -125,6 +125,7 @@
 </head>
 <body>
 <audio id="voiceover-audio" src="voiceover.wav" preload="auto"></audio>
+<audio id="music-audio" src="music.mp3" loop preload="auto"></audio>
 <div id="wrap"><div id="stage">
 
   <div class="scene" id="s1">
@@ -198,10 +199,10 @@
 <script>
   // scene timeline [id, startSec, endSec]
   const scenes = [
-    ['s1',0,4.5],['s2',4.5,9.5],['s3',9.5,14],['s4',14,19.5],['s5',19.5,24.5],
-    ['s6',24.5,33.5],['s7',33.5,39],['s8',39,46],['s9',46,54]
+    ['s1',0,2.5],['s2',2.5,5.3],['s3',5.3,8.2],['s4',8.2,11.2],['s5',11.2,14.2],
+    ['s6',14.2,19.5],['s7',19.5,23],['s8',23,27.2],['s9',27.2,32]
   ];
-  const TOTAL = 54;
+  const TOTAL = 32;
   const bar = document.getElementById('bar');
   let t0 = null, raf = null, counted = false;
 
@@ -213,7 +214,23 @@
       document.getElementById(id).classList.toggle('active', sec>=s && sec<e);
     });
     if(sec < TOTAL) raf = requestAnimationFrame(frame);
-    else document.getElementById('s9').classList.add('active'); // hold endcard
+    else {
+      document.getElementById('s9').classList.add('active'); // hold endcard
+      // Fade out background music when video ends
+      const music = document.getElementById('music-audio');
+      if(music) {
+        let vol = music.volume;
+        const fade = setInterval(()=>{
+          if(vol > 0.01) {
+            vol -= 0.01;
+            music.volume = vol;
+          } else {
+            clearInterval(fade);
+            music.pause();
+          }
+        }, 100);
+      }
+    }
   }
 
   function startSequence(){
@@ -286,8 +303,13 @@
       vo.play().catch(e => console.log("Audio play error:", e));
     }
     
-    // Play background soundtrack
-    playSoundtrack();
+    // Play background music MP3
+    const music = document.getElementById('music-audio');
+    if(music) {
+      music.volume = 0.08;
+      music.currentTime = 0;
+      music.play().catch(e => console.log("Music play error:", e));
+    }
     
     startSequence();
   });
