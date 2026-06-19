@@ -189,6 +189,11 @@
   <div id="bar"></div>
 
   <div id="start">
+    <script>
+      if (new URLSearchParams(location.search).get('auto') === '1') {
+        document.getElementById('start').style.display = 'none';
+      }
+    </script>
     <h2>🎬 סרטון תדמית - ParkAlert</h2>
     <p>60 שניות · לחצו להפעלה</p>
     <button class="btn" id="playBtn">▶ הפעל סרטון</button>
@@ -324,7 +329,24 @@
     
     startSequence();
   });
-  if(new URLSearchParams(location.search).get('auto')==='1'){ startSequence(); }
+  if(new URLSearchParams(location.search).get('auto')==='1'){
+    // Play voiceover
+    const vo = document.getElementById('voiceover-audio');
+    if(vo) {
+      vo.currentTime = 0;
+      vo.play().catch(e => console.log("Audio play error:", e));
+    }
+    
+    // Play background music MP3
+    const music = document.getElementById('music-audio');
+    if(music) {
+      music.volume = 0.04;
+      music.currentTime = 0;
+      music.play().catch(e => console.log("Music play error:", e));
+    }
+    
+    startSequence();
+  }
 </script>
 </body>
 </html>
