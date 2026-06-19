@@ -124,6 +124,7 @@
 </style>
 </head>
 <body>
+<audio id="voiceover-audio" src="voiceover.wav" preload="auto"></audio>
 <div id="wrap"><div id="stage">
 
   <div class="scene" id="s1">
@@ -136,7 +137,7 @@
   </div>
 
   <div class="scene" id="s3">
-    <div class="road"><div class="ring"></div><div class="ring2"></div><div class="car">🚗</div></div>
+    <div class="road"><div class="ring"></div><div class="ring2"></div><div class="car"><span style="display:inline-block; transform: scaleX(-1);">🚗</span></div></div>
     <div class="ktxt"><span class="l">סיבוב אחר סיבוב…</span><span class="l"><span class="accent">בזבוז זמן יקר.</span></span></div>
   </div>
 
@@ -227,11 +228,11 @@
     const now = actx.currentTime + 0.05;
     const master = actx.createGain(); master.connect(actx.destination);
     master.gain.setValueAtTime(0.0001, now);
-    master.gain.exponentialRampToValueAtTime(0.16, now+2);
-    master.gain.exponentialRampToValueAtTime(0.15, now+19);
-    master.gain.exponentialRampToValueAtTime(0.30, now+25);
-    master.gain.exponentialRampToValueAtTime(0.34, now+46);
-    master.gain.exponentialRampToValueAtTime(0.22, now+52);
+    master.gain.exponentialRampToValueAtTime(0.05, now+2);
+    master.gain.exponentialRampToValueAtTime(0.05, now+19);
+    master.gain.exponentialRampToValueAtTime(0.07, now+25);
+    master.gain.exponentialRampToValueAtTime(0.08, now+46);
+    master.gain.exponentialRampToValueAtTime(0.06, now+52);
     master.gain.exponentialRampToValueAtTime(0.0001, now+54.5);
     function note(freq,t,dur,type,gain,ff){
       const o=actx.createOscillator(); o.type=type||'sine'; o.frequency.value=freq;
@@ -277,7 +278,17 @@
     const params = new URLSearchParams(location.search);
     const embed = params.get('embed')==='1';   // embedded in site: no music, no fullscreen
     if(!embed){ try{ await document.getElementById('wrap').requestFullscreen(); }catch(e){} }
-    if(!embed) playSoundtrack();
+    
+    // Play voiceover
+    const vo = document.getElementById('voiceover-audio');
+    if(vo) {
+      vo.currentTime = 0;
+      vo.play().catch(e => console.log("Audio play error:", e));
+    }
+    
+    // Play background soundtrack
+    playSoundtrack();
+    
     startSequence();
   });
   if(new URLSearchParams(location.search).get('auto')==='1'){ startSequence(); }
