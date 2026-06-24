@@ -25,7 +25,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  .prototype-banner { background: #0F6E56; color: #fff; text-align: center; padding: 12px 16px; font-size: 13.5px; font-weight: 500; line-height: 1.5; position: sticky; top: 0; z-index: 100; }
+  .prototype-banner { background: #0F6E56; color: #fff; text-align: center; padding: 12px 16px; font-size: 13.5px; font-weight: 500; line-height: 1.5; position: sticky; top: 0; z-index: 2000; }
   body { font-family: 'Rubik', sans-serif; background: #f5f5f3; color: #1a1a1a; direction: rtl; min-height: 100vh; }
   .container { max-width: 600px; margin: 0 auto; padding: 0 1rem 1rem; }
   .hero-map-wrap .container { padding-bottom: 0; }
@@ -394,6 +394,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <button class="submit-btn" id="submit-btn" disabled>שלח דיווח</button>
   </div><!-- /demo-wrap -->
 
+  <!-- Waitlist HERO - bottom duplicate -->
+  <div class="waitlist-box" id="waitlist-form-bottom" style="margin-top: 1.5rem;">
+    <span class="wl-badge">בקרוב</span>
+    <strong>הרעיון מעניין אותך?</strong>
+    <p class="wl-sub">נמאס להסתובב שעות בחיפוש חנייה סביב קמפוס אונו? ParkAlert תראה לכם בזמן אמת איפה יש חנייה פנויה. אנחנו בודקים אם יש עניין ברעיון. אם הוא מדבר אליכם, השאירו טלפון 🙏</p>
+
+    <span class="wl-label">השאירו מספר טלפון לצורך בדיקת השערת המיזם בלבד</span>
+    <div class="waitlist-row">
+      <input type="tel" placeholder="050-0000000" id="phone-input-bottom" />
+    </div>
+    <button class="wl-submit" onclick="submitWaitlist(true)">
+      <span>כן, הרעיון מעניין אותי!</span>
+      <span class="wl-arrow">←</span>
+    </button>
+  </div>
+
 </div>
 
 <div class="container" style="max-width:600px;margin:0 auto;padding:0 1rem;">
@@ -548,8 +564,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     maybeFormStart();
   }
 
-  function submitWaitlist() {
-    const phone = document.getElementById('phone-input').value.trim();
+  function submitWaitlist(isBottom = false) {
+    const inputId = isBottom ? 'phone-input-bottom' : 'phone-input';
+    const phone = document.getElementById(inputId).value.trim();
     if (!phone) { showToast('נא להכניס מספר טלפון'); return; }
 
     fetch('https://hook.eu1.make.com/bdqd66pey3ylt4rrgqbvcez6djvb1ttb', {
@@ -561,7 +578,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event: 'waitlist_signup', user_type: selectedUserType, parking_time: selectedTime });
 
-    document.getElementById('waitlist-form').style.display = 'none';
+    const formTop = document.getElementById('waitlist-form');
+    const formBottom = document.getElementById('waitlist-form-bottom');
+    if (formTop) formTop.style.display = 'none';
+    if (formBottom) formBottom.style.display = 'none';
+    
     document.getElementById('floating-cta').style.display = 'none';
     const sb = document.getElementById('success-box');
     sb.style.display = 'block';
@@ -590,15 +611,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   window.addEventListener('load', function() {
     const cta = document.getElementById('floating-cta');
     const form = document.getElementById('waitlist-form');
+    const formBottom = document.getElementById('waitlist-form-bottom');
     const mapEl = document.getElementById('parking-map');
     if (!cta) return;
 
     let formVisible = false;
+    let formBottomVisible = false;
     let mapVisible = false;
 
     function updateCtaVisibility() {
       if (cta.style.display === 'none') return;
-      if (formVisible || mapVisible) {
+      if (formVisible || formBottomVisible || mapVisible) {
         cta.style.opacity = '0';
         cta.style.pointerEvents = 'none';
         cta.style.transform = 'translateY(100%)';
@@ -614,6 +637,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         entries.forEach(entry => {
           if (entry.target === form) {
             formVisible = entry.isIntersecting;
+          } else if (entry.target === formBottom) {
+            formBottomVisible = entry.isIntersecting;
           } else if (entry.target === mapEl) {
             mapVisible = entry.isIntersecting;
           }
@@ -622,14 +647,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }, { threshold: 0.05 });
 
       if (form) observer.observe(form);
+      if (formBottom) observer.observe(formBottom);
       if (mapEl) observer.observe(mapEl);
     } else {
       // Fallback
       window.addEventListener('scroll', function() {
         if (!form || !mapEl) return;
         const formRect = form.getBoundingClientRect();
+        const formBottomRect = formBottom ? formBottom.getBoundingClientRect() : null;
         const mapRect = mapEl.getBoundingClientRect();
         formVisible = (formRect.top < window.innerHeight && formRect.bottom > 0);
+        formBottomVisible = formBottomRect ? (formBottomRect.top < window.innerHeight && formBottomRect.bottom > 0) : false;
         mapVisible = (mapRect.top < window.innerHeight && mapRect.bottom > 0);
         updateCtaVisibility();
       }, { passive: true });
